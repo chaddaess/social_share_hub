@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Socials{% endblock %}
+
+{% block body %}
+    {% include 'header.html.twig' %}
+
+    <div class="wrapper--social">
+        <h2 class="title">Let's Get You Setup </h2>
+        <hr>
+        <p class="description">Connect your social media profiles</p>
+        <div class="social--media">
+            <div class="social--medium">
+                <img
+                   class="socials--logo"
+                   src="img/facebook.webp"
+                />
+            </div>
+            <div class="social--medium">
+
+                <img
+                    class="socials--logo"
+                    src="img/insta.webp"
+                />
+            </div>
+            <div class="social--medium">
+                <img
+
+                   class="socials--logo"
+                   src="img/twitter.png"
+                />
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}
