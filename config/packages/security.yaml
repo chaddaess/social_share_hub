@@ -17,8 +17,17 @@ security:
         main:
             lazy: true
             provider: app_user_provider
+#            custom_authenticators:
+#                - App\Security\MyGoogleAuthenticator
             custom_authenticators:
                 - App\Security\MyGoogleAuthenticator
+                - App\Security\LoginAuthenticator
+            entry_point:
+                App\Security\LoginAuthenticator
+            logout:
+                path: app_logout
+                # where to redirect after logout
+                target: app_login
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
