@@ -88,7 +88,7 @@ input{
     color: #e5e5e5;
 }
 button{
-    margin-top: 50px;
+    margin-top: 1rem;
     width: 100%;
     background-color: rgba(98, 97, 103, 0.24);
     color: #080710;
@@ -149,3 +149,16 @@ span{
 .alert{
     color: darkred;
 }
+p{
+    color: black;
+    text-align: center;
+}
+.agree--checkbox{
+width: 2rem;
+height: 1rem;
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    justify-content: center;
+}
+

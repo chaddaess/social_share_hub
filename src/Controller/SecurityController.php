@@ -25,6 +25,9 @@ class SecurityController extends AbstractController
             [
                 'last_username' => $lastUsername,
                 'error' => $error,
+                'method'=>"sign in",
+                'url'=>"connect_google_start",
+                'upOrIn'=>"in"
             ]);
     }
 
