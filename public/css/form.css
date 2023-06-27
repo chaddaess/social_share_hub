@@ -39,7 +39,7 @@ body{
     bottom: -80px;
 }
 form{
-    height: 520px;
+    height: auto;
     width: 400px;
     background-color: rgba(255, 255, 255, 0.06);
     position: absolute;
@@ -97,6 +97,7 @@ button{
     font-weight: 600;
     border-radius: 5px;
     cursor: pointer;
+    height: 3.5rem;
 }
 .social{
     margin-top: 30px;
@@ -162,3 +163,17 @@ height: 1rem;
     justify-content: center;
 }
 
+li{
+    color: darkred;
+
+}
+::marker{
+
+}
+
+button>a{
+    display: block;
+    width: 100%;
+    height: 3.5rem;
+    padding-top: 1.5rem;
+}

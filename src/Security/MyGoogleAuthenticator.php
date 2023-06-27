@@ -63,11 +63,11 @@ $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => 
         $user=new User();
         $user->setgoogleId($googleUser->getId());
         $user->setEmail($googleUser->getEmail());
-//        $user->setPassword('changeme');
         $this->entityManager->persist($user);
         $this->entityManager->flush();
+    }else {
+        $user->setgoogleId($googleUser->getId());
     }
-
 
 return $user;
 })
@@ -104,3 +104,5 @@ Response::HTTP_TEMPORARY_REDIRECT
 );
 }
 }
+
+//@TODO : fix bug: can't connect to a different google acount until disconnecting from it completely in the browser

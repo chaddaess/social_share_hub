@@ -31,16 +31,18 @@
     <button class="btn btn-lg btn-primary" type="submit">
     {{ method }}
     </button>
-    <button class="btn btn-lg btn-primary google" type="submit">
-        <i class="fab fa-google" ></i>
-        <a  class="google-link" href="{{ path(url) }}">Sign {{ upOrIn}} with Google</a>
+    <button class="btn btn-lg btn-primary google" >
+
+        <a  class="google-link" href="{{ path(url) }}"><i class="fab fa-google" ></i>Sign {{ upOrIn}} with Google</a>
     </button>
         {% if upOrIn == "in" %}
-            <p>New here? <a href="{{ path('app_register') }}">Signup</a></p>
+            <p>New here? <a href="{{ path('app_register') }}">Signup </a></p>
         {% else %}
             <p>Already got an account? <a href="{{ path('app_login') }}">Login</a></p>
         {% endif %}
     </form>
+{% block extra %}
+{% endblock %}
 </body>
 </html>
 
