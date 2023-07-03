@@ -17,8 +17,6 @@ security:
         main:
             lazy: true
             provider: app_user_provider
-#            custom_authenticators:
-#                - App\Security\MyGoogleAuthenticator
             custom_authenticators:
                 - App\Security\MyGoogleAuthenticator
                 - App\Security\LoginAuthenticator

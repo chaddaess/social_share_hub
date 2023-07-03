@@ -10,18 +10,23 @@
         <p class="description">Connect your social media profiles</p>
         <div class="social--media">
             <div class="social--medium">
-                    <img
+                <a href="{{ path('app_facebook_login') }}">
 
-                       class="socials--logo"
-                       src="img/facebook.png.webp"
-                    />
+                        {% if picture is not empty %}
+                            <img class="socials--logo picture" src="{{ picture }}" />
+                        {% else %}
+                            <img class="socials--logo" src='img/facebook.png.webp'/>
+                        {% endif %}
+                </a>
             </div>
             <div class="social--medium">
-
-                <img
-                    class="socials--logo"
-                    src="img/insta.png.webp"
-                />
+                <a href="{{ path('app_linkedin_login') }}">
+                    {% if pictureLinkedin is not empty %}
+                        <img class="socials--logo picture" src="{{ pictureLinkedin }}" />
+                    {% else %}
+                        <img class="socials--logo" src="img/linkedin.png.webp" />
+                    {% endif %}
+                </a>
             </div>
             <div class="social--medium">
                 <img

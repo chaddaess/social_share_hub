@@ -41,7 +41,7 @@ $client = $this->clientRegistry->getClient('google');
 $accessToken = $this->fetchAccessToken($client);
 
 return new SelfValidatingPassport(
-new UserBadge($accessToken->getToken(), function() use ($accessToken, $client) {
+new UserBadge($accessToken->getToken(), function() use ($request, $accessToken, $client) {
 /** @var googleUser $googleUser */
 $googleUser = $client->fetchUserFromToken($accessToken);
 
@@ -49,7 +49,8 @@ $email = $googleUser->getEmail();
 
 // 1) have they logged in with Google before? Easy!
 $existingUser = $this->entityManager->getRepository(User::class)->findOneBy(['googleId' => $googleUser->getId()]);
-
+    $session=$request->getSession();
+    $session->set('user_email', $email);
 if ($existingUser) {
 return $existingUser;
 }
@@ -68,10 +69,10 @@ $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => 
     }else {
         $user->setgoogleId($googleUser->getId());
     }
-
 return $user;
 })
 );
+
 }
 
 public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response

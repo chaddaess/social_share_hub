@@ -28,8 +28,10 @@ class LoginAuthenticator extends AbstractLoginFormAuthenticator
     public function authenticate(Request $request): Passport
     {
         $email = $request->request->get('email', '');
+        $session=$request->getSession();
+        $session->set('user_email', $email);
+        $session->set(Security::LAST_USERNAME, $email);
 
-        $request->getSession()->set(Security::LAST_USERNAME, $email);
 
         return new Passport(
             new UserBadge($email),

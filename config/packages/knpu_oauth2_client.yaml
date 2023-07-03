@@ -9,3 +9,5 @@ knpu_oauth2_client:
             # a route name you'll create
             redirect_route: connect_google_check
             redirect_params: {}
+
+
