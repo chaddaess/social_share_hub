@@ -15,18 +15,21 @@ class SocialMediaController extends AbstractController
     {
 
         $session = $request->getSession();
-        if(!$session->get('user_email')){
+        if (!$session->get('user_email')) {
             return ($this->redirectToRoute('app_login'));
 
         }
-        $facebookUser=$session->get('facebook_user');
-        $linkedinUser=$session->get('linkedin_user');
-        $facebookPicture=$facebookUser?$session->get('facebook_user_picture'):'';
-        $linkedinPicture= $linkedinUser?$session->get('linkedin_user_picture'):'';
+        $facebookUser = $session->get('facebook_user');
+        $linkedinUser = $session->get('linkedin_user');
+        $twitterUser = $session->get('twitter_user');
+        $facebookPicture = $facebookUser ? $session->get('facebook_user_picture') : '';
+        $linkedinPicture = $linkedinUser ? $session->get('linkedin_user_picture') : '';
+        $twitterUserPicture = $twitterUser ? $session->get('twitter_user_picture') : '';
         return $this->render('social_media/index.html.twig', [
             'controller_name' => 'SocialMediaController',
-            'pictureLinkedin'=>$linkedinPicture,
-            'picture'=>$facebookPicture,
+            'pictureLinkedin' => $linkedinPicture,
+            'picture' => $facebookPicture,
+            'pictureTwitter' => $twitterUserPicture,
 
         ]);
     }

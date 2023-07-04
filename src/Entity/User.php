@@ -41,6 +41,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $linkedinId = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $twitterId = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -65,7 +68,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string) $this->email;
+        return (string)$this->email;
     }
 
     /**
@@ -90,7 +93,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @see PasswordAuthenticatedUserInterface
      */
-    public function getPassword():?string
+    public function getPassword(): ?string
     {
         return $this->password;
     }
@@ -155,6 +158,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setLinkedinId(?string $linkedinId): static
     {
         $this->linkedinId = $linkedinId;
+
+        return $this;
+    }
+
+    public function getTwitterId(): ?string
+    {
+        return $this->twitterId;
+    }
+
+    public function setTwitterId(?string $twitterId): static
+    {
+        $this->twitterId = $twitterId;
 
         return $this;
     }

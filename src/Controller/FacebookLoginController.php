@@ -10,18 +10,21 @@ use Symfony\Component\Routing\Annotation\Route;
 class FacebookLoginController extends AbstractController
 {
     private Facebook $provider;
-    public function __construct(){
+
+    public function __construct()
+    {
         $this->provider = new Facebook([
-            'clientId'          => $_ENV['FCB_ID'],
-            'clientSecret'      => $_ENV['FCB_SECRET'],
-            'redirectUri'       => $_ENV['FCB_CALLBACK'],
-            'graphApiVersion'   => 'v15.0',
+            'clientId' => $_ENV['FCB_ID'],
+            'clientSecret' => $_ENV['FCB_SECRET'],
+            'redirectUri' => $_ENV['FCB_CALLBACK'],
+            'graphApiVersion' => 'v15.0',
         ]);
     }
+
     #[Route('/facebook/login', name: 'app_facebook_login')]
-    public function index():Response
+    public function index(): Response
     {
-        $helper_url=$this->provider->getAuthorizationUrl();
+        $helper_url = $this->provider->getAuthorizationUrl();
         return $this->redirect($helper_url);
     }
 }

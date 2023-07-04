@@ -61,10 +61,10 @@ class RegistrationController extends AbstractController
 
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
-            'method'=>"sign up",
-            'url'=>"connect_google_start",
-            'upOrIn'=>"up",
-            'password'=>$form->get('plainPassword')->getData()
+            'method' => "sign up",
+            'url' => "connect_google_start",
+            'upOrIn' => "up",
+            'password' => $form->get('plainPassword')->getData()
         ]);
     }
 
