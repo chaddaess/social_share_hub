@@ -10,30 +10,29 @@
         <p class="description">Connect your social media profiles</p>
         <div class="social--media">
             <div class="social--medium">
-                <a href="{{ path('app_facebook_login') }}">
-
-                    {% if picture is not empty %}
+                {% if picture is not empty %}
                         <img class="socials--logo picture" src="{{ picture }}"/>
                         <img class="socials--logo miniature" src='img/facebook.png.webp'/>
 
                     {% else %}
+                <a href="{{ path('app_facebook_login') }}">
                         <img class="socials--logo" src='img/facebook.png.webp'/>
-                    {% endif %}
                 </a>
+                    {% endif %}
             </div>
             <div class="social--medium">
-                <a href="{{ path('app_linkedin_login') }}">
-                    {% if pictureLinkedin is not empty %}
+                {% if pictureLinkedin is not empty %}
                         <img class="socials--logo picture" src="{{ pictureLinkedin }}"/>
                         <img class="socials--logo miniature" src="img/linkedin.png.webp"/>
-
                     {% else %}
+                <a href="{{ path('app_linkedin_login') }}">
                         <img class="socials--logo" src="img/linkedin.png.webp"/>
-                    {% endif %}
                 </a>
+                    {% endif %}
+
             </div>
             <div class="social--medium">
-                <a href="{{ path('app_twitter_login') }}">
+
                     {% if pictureTwitter is not empty %}
                         <img
                                 class="socials--logo picture twitter"
@@ -44,13 +43,15 @@
                                 src="img/twitter.png"
                         />
                     {% else %}
+                <a href="{{ path('app_twitter_login') }}">
                         <img
                                 class="socials--logo"
                                 src="img/twitter.png"
                         />
+                </a>
                     {% endif %}
 
-                </a>
+
             </div>
         </div>
 
