@@ -25,10 +25,9 @@ class PostType extends AbstractType
                 'multiple'=>true,
                 'choices'=>$options['postedOn'],
                 'choice_label' => function ($choice, $key, $value) {
-                    return sprintf('<img src="%s" alt="%s" class="form-choice-pictures"/>', $choice, $key);
+                    return sprintf('<img src="%s" alt="%s" class="form-choice-pictures"/>', $key, $key);
                 },
             ])
-            ->add('user')
             ->add('post',SubmitType::class)
         ;
     }
