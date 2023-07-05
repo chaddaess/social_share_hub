@@ -1,0 +1,25 @@
+{% extends 'templates.html.twig' %}
+
+{% block title %}Post{% endblock %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="css/post.css"/>
+{% endblock %}
+
+{% block body %}
+    {% set socialsArray=['facebook','twitter','linkedin'] %}
+    {% set i=0 %}
+    <div class="form">
+    {{ form_row(form.textContent,{'attr':{'class':'textArea'}}) }}
+        <hr>
+        <p id="checkbox--header">Share your post on</p>
+    {% for child in form.postedOn %}
+        {% set imagePath = 'img/' ~ socialsArray[i] ~ '.png.webp'%}
+        {{ form_widget(child,{'attr':{'class':'checkbox-element'}}) }}
+        <label for="{{ child.vars.id }}">{{ child.vars.label|raw }}</label>
+        <img src="{{ imagePath }}" class="social--media--miniature">
+        {% set i = i + 1 %}
+{% endfor %}
+    {{ form_row(form.post,{'attr':{'class':'submit-button'}}) }}
+
+    </div>
+{% endblock %}
