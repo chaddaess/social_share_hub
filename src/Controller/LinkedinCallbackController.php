@@ -32,12 +32,8 @@ class LinkedinCallbackController extends AbstractController
 
 
         try {
-            //token obtained through POST request
-            $accessTokenString = "AQUS-6eit8_L1GzqXT3z-8QJ38r5ByQx4UnPgvv2Hy3oRCHOK0sD8dEiWSpbSyard0pXO4Nqse67yVC_LONbu2i0f41lIaJU_xrwj57E2RibdAthv0NBYQ1gZ5oRGBF_0Ab998WVDA0jr2lIa768-sor4glOM7L-1Jm0EXPCMTB8bsJO5-qDdDW_-n_1yrHcJ2qJjwxftOPLZEAsK7K4-rrfvXyReCfyrpa6_vlhKt0bP8KN_eXty0jQHQM2cTLGTu5E99Vutha6jtJle9hpQIb586ybvfPTvJhzQNC59VgjwoSAAbFydClb0F2s25mD2zhqmpB-4RphUsj504L3gKie60jmGw";
-            $expires = 5183999;
-            $accessToken = new AccessToken([
-                'access_token' => $accessTokenString,
-                'expires' => $expires,
+            $accessToken = $this->provider->getAccessToken('authorization_code', [
+                'code' => $_GET['code']
             ]);
             //get user's complete info
             $user = $this->provider->getResourceOwner($accessToken);
