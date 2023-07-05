@@ -1,0 +1,28 @@
+{% extends 'login-register--template.html.twig' %}
+
+{% block title %}Register{% endblock %}
+{% block stylesheets %}
+
+{% endblock %}
+
+{% block body %}
+    {% for flash_error in app.flashes('verify_email_error') %}
+        <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
+
+    {% endfor %}
+    {{ form_errors(registrationForm) }}
+
+    {{ form_start(registrationForm) }}
+    {{ form_row(registrationForm.email) }}
+    {{ form_row(registrationForm.plainPassword, {
+        label: 'Password'
+    }) }}
+    {{ form_row(registrationForm.agreeTerms, {
+        'attr': {'class': 'agree--checkbox'},
+        label:'I agree to terms'
+    }) }}
+    {{ form_rest(registrationForm) }}
+{% endblock %}
+{% block extra %}
+{{ password }}
+{%endblock %}
