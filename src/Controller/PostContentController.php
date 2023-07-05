@@ -17,6 +17,11 @@ class PostContentController extends AbstractController
     public function index(Request $request, ManagerRegistryAlias $doctrine,UserRepository $repository)
     {
         $session=$request->getSession();
+        $choices=array();
+        if(!$session->has('user_email'))
+        {
+            return ($this->redirectToRoute('app_login'));
+        }
         if($session->has('facebook_user')){
             $choices[$session->get('facebook_user_picture')]='facebook';
         }
@@ -27,7 +32,9 @@ class PostContentController extends AbstractController
             $choices[$session->get('linkedin_user_picture')]='linkedin';
         }
 
-
+        if(!$choices){
+            return ($this->redirectToRoute('app_social_media'));
+        }
         $post=new Post();
         $form=$this->createForm(PostType::class,$post,[
 
