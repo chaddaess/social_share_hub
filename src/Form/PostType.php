@@ -9,6 +9,9 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Validator\Constraints\File;
+
 
 class PostType extends AbstractType
 {
@@ -18,6 +21,23 @@ class PostType extends AbstractType
             ->add('textContent',TextareaType::class,[
                 'attr'=>['placeholder'=>'post something awesome'],
                 'label'=>false,
+            ])
+            ->add('image', FileType::class, [
+                'mapped' => false,
+                'required' => false,
+                'label'=>'image',
+                'constraints' => [
+                    new File([
+                        'maxSize' => '1024k',
+                        'mimeTypes' => [
+                            'image/bmp',
+                            'image/jpeg',
+                            'image/png',
+                            'image/gif'
+                        ],
+                        'mimeTypesMessage' => 'Please upload a valid image',
+                    ])
+                ],
             ])
             ->add('postedOn',ChoiceType::class,[
                 'label'=>false,
@@ -29,6 +49,8 @@ class PostType extends AbstractType
                 },
             ])
             ->add('post',SubmitType::class)
+
+
         ;
     }
 

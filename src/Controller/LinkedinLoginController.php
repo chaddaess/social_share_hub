@@ -19,7 +19,6 @@ class LinkedinLoginController extends AbstractController
             'clientId' => $_ENV['LINK_ID'],
             'clientSecret' => $_ENV['LINK_SECRET'],
             'redirectUri' => $_ENV['LINK_CALLBACK'],
-            'graphApiVersion' => 'v15.0',
         ]);
     }
 

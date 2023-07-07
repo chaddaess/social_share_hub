@@ -5,11 +5,12 @@ body{
 }
 .form{
     border: 1px solid transparent;
-    height: 40rem;
+    height: auto;
     width: 50rem;
     margin-top:2rem;
     border-radius: 12px;
     background-color: white;
+    padding-top: 1rem;
 }
 .textArea{
     width: 49.9rem;
@@ -29,7 +30,8 @@ body{
 }
 
 .submit-button{
-    margin-top: 5rem;
+    margin-top: 4rem;
+    margin-bottom: 1rem;
     margin-left: 75%;
     width: 10rem;
     border: 1px solid transparent;
@@ -51,9 +53,10 @@ body{
     scale:2;
 
 }
+
 label{
     opacity:0.5;
-    margin-right: 10rem;
+    margin-right: 7rem;
 }
 
 input[type="checkbox"] {
@@ -61,7 +64,7 @@ input[type="checkbox"] {
 
 }
 .checkbox-element{
-    margin-left: 5rem;
+    margin-left: 10rem;
 }
 
 input[type="checkbox"] + label {
@@ -81,19 +84,29 @@ hr{
 }
 
 input[type="checkbox"] + label:first-of-type {
-    margin-left: 10rem;
+    margin-left: 12rem;
 }
 #checkbox--header{
     margin-left: 2.1rem;
     margin-top: 2rem;
+}
+label:first-of-type{
+    margin-left: 45rem;
 }
 
 .social--media--miniature{
     height: 1.5rem;
     width: 1.5rem;
     position: absolute;
-    margin-left: -10rem;
+    margin-left: -7.5rem;
     margin-top: 5rem;
     z-index: 4;
 }
+.form-error{
+    color: darkred;
+    font-size: 14px;
 
+}
+.form-error ul{
+    list-style: none;
+}

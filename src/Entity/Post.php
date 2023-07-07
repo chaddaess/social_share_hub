@@ -27,6 +27,9 @@ class Post
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $attachedImage = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -76,6 +79,18 @@ class Post
     public function setUser(?User $user): static
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    public function getAttachedImage(): ?string
+    {
+        return $this->attachedImage;
+    }
+
+    public function setAttachedImage(?string $attachedImage): static
+    {
+        $this->attachedImage = $attachedImage;
 
         return $this;
     }

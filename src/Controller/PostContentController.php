@@ -5,19 +5,22 @@ namespace App\Controller;
 use App\Entity\Post;
 use App\Form\PostType;
 use App\Repository\UserRepository;
+use CURLFile;
 use Doctrine\Persistence\ManagerRegistry as ManagerRegistryAlias;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Abraham\TwitterOAuth\TwitterOAuth;
 use GuzzleHttp\Client;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 
 class PostContentController extends AbstractController
 {
     #[Route('/post', name: 'app_post_content')]
-    public function index(Request $request, ManagerRegistryAlias $doctrine, UserRepository $repository)
+    public function index(Request $request, ManagerRegistryAlias $doctrine, UserRepository $repository,SluggerInterface $slugger)
     {
         $session = $request->getSession();
         $choices = array();
@@ -47,7 +50,7 @@ class PostContentController extends AbstractController
             'postedOn' => $choices,
         ]);
         $form->handleRequest($request);
-        if ($form->isSubmitted()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             //set up post
             $currentTimeStamp = new \DateTime();
             $post->setPostTime($currentTimeStamp);
@@ -56,6 +59,22 @@ class PostContentController extends AbstractController
             $manager = $doctrine->getManager();
             $socialsArray = ($form->getData()->getPostedOn());
             $text = $form->getData()->getTextContent();
+            $brochureFile = $form->get('image')->getData();
+            if ($brochureFile) {
+                $originalFilename = pathinfo($brochureFile->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $slugger->slug($originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid().'.'.$brochureFile->guessExtension();
+                try {
+                    $brochureFile->move(
+                        $this->getParameter('images_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                }
+                $post->setAttachedImage($newFilename);
+                $image_path="uploads/images/$newFilename";
+            }
+
             //make api calls to every social media in $socialsArray to post $text
             //creating a multi call handler
             $mh = curl_multi_init();
@@ -64,57 +83,60 @@ class PostContentController extends AbstractController
             if (in_array('twitter', $socialsArray)) {
                 $url = 'https://api.twitter.com/2/tweets';
                 $access_token_tw = $session->get('twitter_session')['token'];
-                $chTwitter = curl_init($url);
-                curl_setopt($chTwitter, CURLOPT_POST, true);
-                curl_setopt($chTwitter, CURLOPT_HTTPHEADER, [
-                    'Authorization: Bearer ' . $access_token_tw,
-                    'Content-Type: application/json',
-                ]);
-                curl_setopt($chTwitter, CURLOPT_POSTFIELDS, json_encode(['text' => $text]));
-                curl_setopt($chTwitter, CURLOPT_RETURNTRANSFER, true);
-                curl_multi_add_handle($mh, $chTwitter);
-                $handles['twitterHandler']=$chTwitter;
-            }
-
-
+                if(!$brochureFile){
+                    $chTwitter = curl_init($url);
+                    curl_setopt($chTwitter, CURLOPT_POST, true);
+                    curl_setopt($chTwitter, CURLOPT_HTTPHEADER, [
+                        'Authorization: Bearer ' . $access_token_tw,
+                        'Content-Type: application/json',
+                    ]);
+                    curl_setopt($chTwitter, CURLOPT_POSTFIELDS, json_encode(['text' => $text]));
+                    curl_setopt($chTwitter, CURLOPT_RETURNTRANSFER, true);
+                    curl_multi_add_handle($mh, $chTwitter);
+                    $handles['twitterHandler']=$chTwitter;
+                }
             //2 Post to Linkedin
             if(in_array('linkedin', $socialsArray)){
                 $access_token_link = $session->get('linkedin_session')['token'];
                 $userID=($session->get('linkedin_session')['user'])->getId();
-                $data = [
-                    'author' => "urn:li:person:$userID",
-                    'lifecycleState' => 'PUBLISHED',
-                    'specificContent' => [
-                        'com.linkedin.ugc.ShareContent' => [
-                            'shareCommentary' => [
-                                'text' => $text
-                            ],
-                            'shareMediaCategory' => 'NONE'
-                        ]
-                    ],
-                    'visibility' => [
-                        'com.linkedin.ugc.MemberNetworkVisibility' => 'PUBLIC'
-                    ]
-                ];
+                if(!$brochureFile){
+                //post without any picture
+                    $data = [
+                        'author' => "urn:li:person:$userID",
+                        'lifecycleState' => 'PUBLISHED',
+                        'specificContent' => [
+                            'com.linkedin.ugc.ShareContent' => [
+                                'shareCommentary' => [
+                                    'text' => $text
+                                ],
+                                'shareMediaCategory' => 'NONE'
+                            ]
+                        ],
+                        'visibility' => [
+                            'com.linkedin.ugc.MemberNetworkVisibility' => 'PUBLIC'
+                        ],
+                    ];
+                    $data_json = json_encode($data);
+                    $chLinkedin = curl_init();
+                    curl_setopt($chLinkedin, CURLOPT_URL, "https://api.linkedin.com/v2/ugcPosts");
+                    curl_setopt($chLinkedin, CURLOPT_POST, 1);
+                    curl_setopt($chLinkedin, CURLOPT_POSTFIELDS, $data_json);
+                    curl_setopt($chLinkedin, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($chLinkedin, CURLOPT_HTTPHEADER, array(
+                        'Content-Type: application/json',
+                        'Authorization: Bearer '.$access_token_link,
+                        'X-Restli-Protocol-Version: 2.0.0'
+                    ));
+                    curl_multi_add_handle($mh, $chLinkedin);
+                    $handles['linkedinHandler']=$chLinkedin;
+                }
+                else{
 
-                $data_json = json_encode($data);
 
-                $chLinkedin = curl_init();
-                curl_setopt($chLinkedin, CURLOPT_URL, "https://api.linkedin.com/v2/ugcPosts");
-                curl_setopt($chLinkedin, CURLOPT_POST, 1);
-                curl_setopt($chLinkedin, CURLOPT_POSTFIELDS, $data_json);
-                curl_setopt($chLinkedin, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($chLinkedin, CURLOPT_HTTPHEADER, array(
-                    'Content-Type: application/json',
-                    'Authorization: Bearer '.$access_token_link,
-                    'X-Restli-Protocol-Version: 2.0.0'
-                ));
-                curl_multi_add_handle($mh, $chLinkedin);
-                $handles['linkedinHandler']=$chLinkedin;
+                }
             }
 
-
-            // Execute the requests in parallel
+             //Execute the requests in parallel
             do {
                 $mrc = curl_multi_exec($mh, $active);
             } while ($mrc == CURLM_CALL_MULTI_PERFORM);
@@ -159,7 +181,6 @@ class PostContentController extends AbstractController
             $manager->flush();
             return ($this->redirectToRoute("app_social_media"));
         } else {
-
             $options=[];
             $i=0;
             foreach ($choices as $key=>$value){
