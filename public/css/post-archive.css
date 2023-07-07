@@ -46,13 +46,12 @@ hr{
     margin-left: 7rem;
 }
 .post--body{
-    width:20rem;
+    width:auto;
     height: auto;
     border:1px solid transparent;
     background-color: whitesmoke;
     margin-left: 7rem;
     white-space: normal;
-    display: inline-block;
 
 }
 

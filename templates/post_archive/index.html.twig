@@ -1,0 +1,34 @@
+{% extends 'templates.html.twig' %}
+
+{% block title %}Archive{% endblock %}
+{% block stylesheets %}
+<link rel="stylesheet" href="css/post-archive.css"/>
+{% endblock  %}
+{% block body %}
+<div class="posts">
+    {%if posts is empty %}
+        <div class="empty">
+            No posts yet,
+            <a href="{{ path('app_post_content') }}">start by posting something amazing</a>
+        </div>
+    {% endif %}
+    {% for post in posts %}
+            <div class="post-box">
+                <p class="title">Post:</p>
+                <p class="post--body">
+                    {{ post.textContent }}
+                </p>
+                <hr>
+                <p class="title">Social platforms:</p>
+                <div class="socials">
+                    {%for media in post.postedOn %}
+                        {% set path='img/'~media~'.png.webp'%}
+                        <img src="{{ path }}" class="social--media--archive" />
+                    {% endfor %}
+                </div>
+                <span>Posted at {{ post.postTime|date('m/d/Y H:i:s') }}</span>
+                <br>
+            </div>
+    {% endfor %}
+</div>
+{% endblock %}

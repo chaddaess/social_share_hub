@@ -62,8 +62,15 @@ class LinkedinCallbackController extends AbstractController
             // Get the URL of the profile picture
             $profilePictureUrl = $data["profilePicture"]["displayImage~"]["elements"][0]["identifiers"][0]["identifier"];
             //set the session
-            $session->set('linkedin_user_picture', $profilePictureUrl);
-            $session->set('linkedin_user', $user);
+            $linkedin_session=[
+                'user'=>$user,
+                'picture'=>$profilePictureUrl,
+                'token'=>$accessToken,
+
+            ];
+            $session->set('linkedin_session',$linkedin_session);
+//            $session->set('linkedin_user_picture', $profilePictureUrl);
+//            $session->set('linkedin_user', $user);
             return ($this->redirectToRoute('app_social_media'));
         } catch (\Exception $e) {
             dd("hehe catch");

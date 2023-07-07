@@ -7,6 +7,13 @@
 {% block body %}
 
     <div class="wrapper--social">
+            {% for error in app.flashes('unauthorized_access') %}
+                {% if error is not empty %}
+                <div class="error-message">
+                    {{ error }}
+                </div>
+                {% endif %}
+            {% endfor %}
         <h2 class="title">Let's Get You Setup </h2>
         <hr>
         <p class="description">Connect your social media profiles</p>
@@ -48,13 +55,13 @@
                 </a>
                         <img
                                 class="socials--logo miniature"
-                                src="img/twitter.png"
+                                src="img/twitter.png.webp"
                         />
                     {% else %}
                 <a href="{{ path('app_twitter_login') }}">
                         <img
                                 class="socials--logo"
-                                src="img/twitter.png"
+                                src="img/twitter.png.webp"
                         />
                 </a>
                     {% endif %}

@@ -51,8 +51,12 @@ class TwitterCallbackController extends AbstractController
             $manager->persist($user_connected);
             $manager->flush();
             //set the session
-            $session->set('twitter_user', $user);
-            $session->set('twitter_user_picture', $userPicture);
+            $twitterSession=[
+                'user'=>$user,
+                'picture'=>$userPicture,
+                'token'=>$token,
+            ];
+            $session->set('twitter_session',$twitterSession);
             return ($this->redirectToRoute('app_social_media'));
 
         } catch (\Exception $e) {

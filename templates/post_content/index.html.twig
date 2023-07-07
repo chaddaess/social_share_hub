@@ -3,18 +3,28 @@
 {% block title %}Post{% endblock %}
 {% block stylesheets %}
     <link rel="stylesheet" href="css/post.css"/>
+
+{% endblock %}
+{% block javascripts %}
 {% endblock %}
 
 {% block body %}
-    {% set socialsArray=['facebook','twitter','linkedin'] %}
+
     {% set i=0 %}
     <div class="form">
+        {% for error in app.flashes('missing_link') %}
+            {% if error is not empty %}
+                <div class="error-message">
+                    {{ error }}
+                </div>
+            {% endif %}
+        {% endfor %}
     {{ form_start(form) }}
         {{ form_row(form.textContent,{'attr':{'class':'textArea'}}) }}
             <hr>
             <p id="checkbox--header">Share your post on</p>
         {% for child in form.postedOn %}
-            {% set imagePath = 'img/' ~ socialsArray[i] ~ '.png.webp'%}
+            {% set imagePath = 'img/' ~ options[i] ~ '.png.webp'%}
             {{ form_widget(child,{'attr':{'class':'checkbox-element'}}) }}
             <label for="{{ child.vars.id }}">{{ child.vars.label|raw }}</label>
             <img src="{{ imagePath }}" class="social--media--miniature">

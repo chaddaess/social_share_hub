@@ -34,6 +34,7 @@ class FacebookCallbackController extends AbstractController
             $token = $this->provider->getAccessToken('authorization_code', [
                 'code' => $_GET['code']
             ]);
+
         } catch (IdentityProviderException $e) {
         }
 
@@ -50,8 +51,12 @@ class FacebookCallbackController extends AbstractController
             //get user's picture
             $userPicture = "http://graph.facebook.com/$id/picture?type=large&access_token=$token";
             //set the session
-            $session->set('facebook_user', $user);
-            $session->set('facebook_user_picture', $userPicture);
+            $facebookSession=[
+                'user'=>$user,
+                'picture'=>$userPicture,
+                'token'=>$token,
+            ];
+            $session->set('facebook_session',$facebookSession);
             return ($this->redirectToRoute('app_social_media'));
         } catch (\Exception $e) {
         }
