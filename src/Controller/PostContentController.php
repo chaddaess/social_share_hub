@@ -34,13 +34,13 @@ class PostContentController extends AbstractController
                 'error_message' => "⨂ Please sign in to post on your social media"
             ]));
         }
-        if ($session->has('facebook_session')) {
+        if ($session->get('facebook_session')['picture']!='') {
             $choices[$session->get('facebook_session')['picture']] = 'facebook';
         }
-        if ($session->has('twitter_session')) {
+        if ($session->get('twitter_session')['picture']!='') {
             $choices[$session->get('twitter_session')['picture']] = 'twitter';
         }
-        if ($session->has('linkedin_session')) {
+        if ($session->get('linkedin_session')['picture']!='') {
             $choices[$session->get('linkedin_session')['picture']] = 'linkedin';
         }
 
@@ -51,7 +51,6 @@ class PostContentController extends AbstractController
         }
         $post = new Post();
         $form = $this->createForm(PostType::class, $post, [
-
             'postedOn' => $choices,
         ]);
         $form->handleRequest($request);
@@ -185,8 +184,11 @@ class PostContentController extends AbstractController
             $options=[];
             $i=0;
             foreach ($choices as $key=>$value){
-                $options[$i]=$value;
-                $i++;
+                if($key)
+                {   $options[$i]=$value;
+                    $i++;
+
+                }
             }
             return $this->render('post_content/index.html.twig', [
                 'form' => $form->createView(),

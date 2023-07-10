@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\UserRepository;
+use Cassandra\Time;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,7 +22,8 @@ class SocialMediaController extends AbstractController
             return ($this->redirectToRoute('app_login'));
 
         }
-        $currentTimestamp = new \DateTime('now');
+        $currentTimestamp = (new \DateTime())->getTimestamp();
+
 
         if(!$session->get('checked')){
             //first time accessing the route
@@ -29,9 +31,9 @@ class SocialMediaController extends AbstractController
             $facebook_valid=$user_connected->getFacebookExpirationTime()>=$currentTimestamp; //TRUE of token is valid
             $twitter_valid=$user_connected->getTwitterExpirationTime()>=$currentTimestamp;
             $linkedin_valid=$user_connected->getLinkedinExpirationTime()>=$currentTimestamp;
-            $facebookPicture=$facebook_valid?'':$user_connected->getFacebookPicture();
-            $twitterPicture=$twitter_valid?'':$user_connected->getTwitterPicture();
-            $linkedinPicture=$linkedin_valid?'':$user_connected->getLinkedinPicture();
+            $facebookPicture=$facebook_valid?$user_connected->getFacebookPicture():'';
+            $twitterPicture=$twitter_valid?$user_connected->getTwitterPicture():'';
+            $linkedinPicture=$linkedin_valid?$user_connected->getLinkedinPicture():'';
             $fb=$session->get('facebook_session');
             $fb['picture']=$facebookPicture;
             $session->set('facebook_session',$fb);
