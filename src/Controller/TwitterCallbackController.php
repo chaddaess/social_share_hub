@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Abraham\TwitterOAuth\TwitterOAuth;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
@@ -28,13 +29,12 @@ class TwitterCallbackController extends AbstractController
     #[Route('/twitter-callback', name: 'twitter_callback')]
     public function index(UserRepository $userDb, EntityManagerInterface $manager, Request $request): Response
     {
-        //get access token
+//        //get access token
         try {
             $token = $this->provider->getAccessToken('authorization_code', [
                 'code' => $_GET['code'],
                 'code_verifier' => $request->getSession()->get('verifier'),
             ]);
-
         } catch (IdentityProviderException $e) {
             dump("oops catch1");
         }
@@ -48,6 +48,8 @@ class TwitterCallbackController extends AbstractController
             $session = $request->getSession();
             $user_connected = $userDb->findOneBy(['email' => $session->get('user_email')]);
             $user_connected->setTwitterId($user->getId());
+            $user_connected->setTwitterPicture($userPicture);
+            $user_connected->setTwitterExpirationTime($token->getExpires());
             $manager->persist($user_connected);
             $manager->flush();
             //set the session
@@ -63,6 +65,8 @@ class TwitterCallbackController extends AbstractController
             dump("oops catch2");
         }
         return ($this->redirectToRoute('app_social_media'));
+
+
 
     }
 }

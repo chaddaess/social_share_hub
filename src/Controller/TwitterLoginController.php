@@ -2,8 +2,11 @@
 
 namespace App\Controller;
 
+use Abraham\TwitterOAuth\TwitterOAuth;
+use Abraham\TwitterOAuth\TwitterOAuthException;
 use Smolblog\OAuth2\Client\Provider\Twitter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -40,6 +43,7 @@ class TwitterLoginController extends AbstractController
         $session = $request->getSession();
         $session->set('verifier', $this->provider->getPkceVerifier());
         return $this->redirect($helper_url_modified);
+
     }
 
 }

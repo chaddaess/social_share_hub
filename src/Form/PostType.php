@@ -22,23 +22,23 @@ class PostType extends AbstractType
                 'attr'=>['placeholder'=>'post something awesome'],
                 'label'=>false,
             ])
-            ->add('image', FileType::class, [
-                'mapped' => false,
-                'required' => false,
-                'label'=>'image',
-                'constraints' => [
-                    new File([
-                        'maxSize' => '1024k',
-                        'mimeTypes' => [
-                            'image/bmp',
-                            'image/jpeg',
-                            'image/png',
-                            'image/gif'
-                        ],
-                        'mimeTypesMessage' => 'Please upload a valid image',
-                    ])
-                ],
-            ])
+//            ->add('image', FileType::class, [
+//                'mapped' => false,
+//                'required' => false,
+//                'label'=>'image',
+//                'constraints' => [
+//                    new File([
+//                        'maxSize' => '1024k',
+//                        'mimeTypes' => [
+//                            'image/bmp',
+//                            'image/jpeg',
+//                            'image/png',
+//                            'image/gif'
+//                        ],
+//                        'mimeTypesMessage' => 'Please upload a valid image',
+//                    ])
+//                ],
+//            ])
             ->add('postedOn',ChoiceType::class,[
                 'label'=>false,
                 'expanded'=>true,

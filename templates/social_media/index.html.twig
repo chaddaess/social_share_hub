@@ -20,7 +20,7 @@
         <div class="social--media">
             <div class="social--medium">
                 {% if picture is not empty %}
-                <a href="{{ path('app_facebook_login') }}">
+                <a href="#">
                         <img class="socials--logo picture" src="{{ picture }}"/>
                         <img class="socials--logo miniature" src='img/facebook.png.webp'/>
                 </a>
@@ -32,7 +32,7 @@
             </div>
             <div class="social--medium">
                 {% if pictureLinkedin is not empty %}
-                <a href="{{ path('app_linkedin_login') }}">
+                <a href="#">
                 <img class="socials--logo picture" src="{{ pictureLinkedin }}"/>
                 </a>
 
@@ -46,8 +46,8 @@
             </div>
             <div class="social--medium">
 
-                    {% if pictureTwitter is not empty %}
-                <a href="{{ path('app_twitter_login') }}">
+            {% if pictureTwitter is not empty %}
+                <a href="#">
                         <img
                                 class="socials--logo picture twitter"
                                 src="{{ pictureTwitter }}"

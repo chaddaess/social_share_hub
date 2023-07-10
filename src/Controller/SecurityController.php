@@ -23,7 +23,7 @@ class SecurityController extends AbstractController
         $lastUsername = $authenticationUtils->getLastUsername();
         $postErrorMessage=$request->get('error_message');
         $this->addFlash('unauthorized_access',$postErrorMessage);
-
+        $request->getSession()->set('checked',false);
         return $this->render('security/login.html.twig',
             [
                 'last_username' => $lastUsername,

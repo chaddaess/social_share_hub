@@ -42,14 +42,16 @@ class FacebookCallbackController extends AbstractController
             //get user's complete info
             $user = $this->provider->getResourceOwner($token);
             $id = $user->getId();
+            //get user's picture
+            $userPicture = "http://graph.facebook.com/$id/picture?type=large&access_token=$token";
             //add Facebook account to current user
             $session = $request->getSession();
             $user_connected = $userDb->findOneBy(['email' => $session->get('user_email')]);
             $user_connected->setFacebookId($user->getId());
+            $user_connected->setFacebookPicture($userPicture);
+            $user_connected->setFacebookExpirationTime($token->getExpires());
             $manager->persist($user_connected);
             $manager->flush();
-            //get user's picture
-            $userPicture = "http://graph.facebook.com/$id/picture?type=large&access_token=$token";
             //set the session
             $facebookSession=[
                 'user'=>$user,

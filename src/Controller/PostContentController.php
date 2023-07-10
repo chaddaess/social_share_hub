@@ -2,11 +2,14 @@
 
 namespace App\Controller;
 
+use Abraham\TwitterOAuth\TwitterOAuthException;
 use App\Entity\Post;
 use App\Form\PostType;
 use App\Repository\UserRepository;
 use CURLFile;
 use Doctrine\Persistence\ManagerRegistry as ManagerRegistryAlias;
+use League\OAuth1\Client\Credentials\CredentialsException;
+use League\OAuth1\Client\Server\Twitter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,6 +18,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Abraham\TwitterOAuth\TwitterOAuth;
 use GuzzleHttp\Client;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use League\OAuth1\Client\Server;
+
 
 
 class PostContentController extends AbstractController
@@ -59,48 +64,49 @@ class PostContentController extends AbstractController
             $manager = $doctrine->getManager();
             $socialsArray = ($form->getData()->getPostedOn());
             $text = $form->getData()->getTextContent();
-            $brochureFile = $form->get('image')->getData();
-            if ($brochureFile) {
-                $originalFilename = pathinfo($brochureFile->getClientOriginalName(), PATHINFO_FILENAME);
-                $safeFilename = $slugger->slug($originalFilename);
-                $newFilename = $safeFilename.'-'.uniqid().'.'.$brochureFile->guessExtension();
-                try {
-                    $brochureFile->move(
-                        $this->getParameter('images_directory'),
-                        $newFilename
-                    );
-                } catch (FileException $e) {
-                }
-                $post->setAttachedImage($newFilename);
-                $image_path="uploads/images/$newFilename";
-            }
+            //image upload,cancelled
+            //$brochureFile = $form->get('image')->getData();
+//            if ($brochureFile) {
+//                $originalFilename = pathinfo($brochureFile->getClientOriginalName(), PATHINFO_FILENAME);
+//                $safeFilename = $slugger->slug($originalFilename);
+//                $newFilename = $safeFilename.'-'.uniqid().'.'.$brochureFile->guessExtension();
+//                try {
+//                    $brochureFile->move(
+//                        $this->getParameter('images_directory'),
+//                        $newFilename
+//                    );
+//                } catch (FileException $e) {
+//                }
+//                $post->setAttachedImage($newFilename);
+//                $image_path="uploads/images/$newFilename";
+//            }
 
             //make api calls to every social media in $socialsArray to post $text
             //creating a multi call handler
             $mh = curl_multi_init();
-            $handles=array();
+            $handles = array();
             //1 Post to Twitter
             if (in_array('twitter', $socialsArray)) {
                 $url = 'https://api.twitter.com/2/tweets';
                 $access_token_tw = $session->get('twitter_session')['token'];
-                if(!$brochureFile){
-                    $chTwitter = curl_init($url);
-                    curl_setopt($chTwitter, CURLOPT_POST, true);
-                    curl_setopt($chTwitter, CURLOPT_HTTPHEADER, [
-                        'Authorization: Bearer ' . $access_token_tw,
-                        'Content-Type: application/json',
-                    ]);
-                    curl_setopt($chTwitter, CURLOPT_POSTFIELDS, json_encode(['text' => $text]));
-                    curl_setopt($chTwitter, CURLOPT_RETURNTRANSFER, true);
-                    curl_multi_add_handle($mh, $chTwitter);
-                    $handles['twitterHandler']=$chTwitter;
-                }
+                $chTwitter = curl_init($url);
+                curl_setopt($chTwitter, CURLOPT_POST, true);
+                curl_setopt($chTwitter, CURLOPT_HTTPHEADER, [
+                    'Authorization: Bearer ' . $access_token_tw,
+                    'Content-Type: application/json',
+                ]);
+                curl_setopt($chTwitter, CURLOPT_POSTFIELDS, json_encode(['text' => $text]));
+                curl_setopt($chTwitter, CURLOPT_RETURNTRANSFER, true);
+                curl_multi_add_handle($mh, $chTwitter);
+                $handles['twitterHandler'] = $chTwitter;
+            }
+
+
             //2 Post to Linkedin
-            if(in_array('linkedin', $socialsArray)){
+            if(in_array('linkedin', $socialsArray)) {
                 $access_token_link = $session->get('linkedin_session')['token'];
-                $userID=($session->get('linkedin_session')['user'])->getId();
-                if(!$brochureFile){
-                //post without any picture
+                $userID = ($session->get('linkedin_session')['user'])->getId();
+                    //post without any picture
                     $data = [
                         'author' => "urn:li:person:$userID",
                         'lifecycleState' => 'PUBLISHED',
@@ -124,17 +130,12 @@ class PostContentController extends AbstractController
                     curl_setopt($chLinkedin, CURLOPT_RETURNTRANSFER, true);
                     curl_setopt($chLinkedin, CURLOPT_HTTPHEADER, array(
                         'Content-Type: application/json',
-                        'Authorization: Bearer '.$access_token_link,
+                        'Authorization: Bearer ' . $access_token_link,
                         'X-Restli-Protocol-Version: 2.0.0'
                     ));
                     curl_multi_add_handle($mh, $chLinkedin);
-                    $handles['linkedinHandler']=$chLinkedin;
+                    $handles['linkedinHandler'] = $chLinkedin;
                 }
-                else{
-
-
-                }
-            }
 
              //Execute the requests in parallel
             do {

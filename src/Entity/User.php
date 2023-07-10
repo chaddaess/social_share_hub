@@ -50,6 +50,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Post::class, orphanRemoval: true)]
     private Collection $posts;
 
+    #[ORM\Column(length: 1000, nullable: true)]
+    private ?string $facebookPicture = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $facebookExpirationTime = null;
+
+    #[ORM\Column(length: 1000, nullable: true)]
+    private ?string $TwitterPicture = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $TwitterExpirationTime = null;
+
+    #[ORM\Column(length: 1000, nullable: true)]
+    private ?string $LinkedinPicture = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $LinkedinExpirationTime = null;
+
     public function __construct()
     {
         $this->posts = new ArrayCollection();
@@ -217,5 +235,77 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __toString():String
     {
         return($this->email);
+    }
+
+    public function getFacebookPicture(): ?string
+    {
+        return $this->facebookPicture;
+    }
+
+    public function setFacebookPicture(?string $facebookPicture): static
+    {
+        $this->facebookPicture = $facebookPicture;
+
+        return $this;
+    }
+
+    public function getFacebookExpirationTime(): ?string
+    {
+        return $this->facebookExpirationTime;
+    }
+
+    public function setFacebookExpirationTime(?string $facebookExpirationTime): static
+    {
+        $this->facebookExpirationTime = $facebookExpirationTime;
+
+        return $this;
+    }
+
+    public function getTwitterPicture(): ?string
+    {
+        return $this->TwitterPicture;
+    }
+
+    public function setTwitterPicture(?string $TwitterPicture): static
+    {
+        $this->TwitterPicture = $TwitterPicture;
+
+        return $this;
+    }
+
+    public function getTwitterExpirationTime(): ?string
+    {
+        return $this->TwitterExpirationTime;
+    }
+
+    public function setTwitterExpirationTime(?string $TwitterExpirationTime): static
+    {
+        $this->TwitterExpirationTime = $TwitterExpirationTime;
+
+        return $this;
+    }
+
+    public function getLinkedinPicture(): ?string
+    {
+        return $this->LinkedinPicture;
+    }
+
+    public function setLinkedinPicture(?string $LinkedinPicture): static
+    {
+        $this->LinkedinPicture = $LinkedinPicture;
+
+        return $this;
+    }
+
+    public function getLinkedinExpirationTime(): ?string
+    {
+        return $this->LinkedinExpirationTime;
+    }
+
+    public function setLinkedinExpirationTime(?string $LinkedinExpirationTime): static
+    {
+        $this->LinkedinExpirationTime = $LinkedinExpirationTime;
+
+        return $this;
     }
 }

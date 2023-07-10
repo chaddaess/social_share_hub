@@ -36,14 +36,9 @@ class LinkedinCallbackController extends AbstractController
                 'code' => $_GET['code']
             ]);
             //get user's complete info
+
             $user = $this->provider->getResourceOwner($accessToken);
             $email = $user->getEmail();//this is returning null for some reason
-            //add Linkedin account to the current user
-            $session = $request->getSession();
-            $user_connected = $userDb->findOneBy(['email' => $session->get('user_email')]);
-            $user_connected->setLinkedinId($user->getId());
-            $manager->persist($user_connected);
-            $manager->flush();
             //to get the user's picture
             // Set the API endpoint and access token
             $apiUrl = "https://api.linkedin.com/v2/me?projection=(id,profilePicture(displayImage~:playableStreams))";
@@ -61,6 +56,14 @@ class LinkedinCallbackController extends AbstractController
             $data = json_decode($response, true);
             // Get the URL of the profile picture
             $profilePictureUrl = $data["profilePicture"]["displayImage~"]["elements"][0]["identifiers"][0]["identifier"];
+            //add Linkedin account to the current user
+            $session = $request->getSession();
+            $user_connected = $userDb->findOneBy(['email' => $session->get('user_email')]);
+            $user_connected->setLinkedinId($user->getId());
+            $user_connected->setLinkedinPicture($profilePictureUrl);
+            $user_connected->setLinkedinExpirationTime($accessToken->getExpires());
+            $manager->persist($user_connected);
+            $manager->flush();
             //set the session
             $linkedin_session=[
                 'user'=>$user,

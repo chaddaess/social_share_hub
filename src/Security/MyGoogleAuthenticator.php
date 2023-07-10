@@ -80,13 +80,9 @@ class MyGoogleAuthenticator extends OAuth2Authenticator implements Authenticatio
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
-// change "app_homepage" to some route in your app
         $targetUrl = $this->router->generate('app_social_media');
-
+        $request->getSession()->set('checked',false);
         return new RedirectResponse($targetUrl);
-
-// or, on success, let the request continue to be handled by the controller
-//return null;
     }
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
