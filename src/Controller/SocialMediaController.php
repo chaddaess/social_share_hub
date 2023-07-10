@@ -22,26 +22,35 @@ class SocialMediaController extends AbstractController
 
         }
         $currentTimestamp = new \DateTime('now');
+
         if(!$session->get('checked')){
             //first time accessing the route
             $user_connected = $userDb->findOneBy(['email' => $session->get('user_email')]);
-            $facebook_valid=$user_connected->getFacebookExpirationTime()>=$currentTimestamp;
+            $facebook_valid=$user_connected->getFacebookExpirationTime()>=$currentTimestamp; //TRUE of token is valid
             $twitter_valid=$user_connected->getTwitterExpirationTime()>=$currentTimestamp;
             $linkedin_valid=$user_connected->getLinkedinExpirationTime()>=$currentTimestamp;
-            $facebookPicture=$facebook_valid?"img/facebook.png.webp":$user_connected->getFacebookPicture();
-            $twitterPicture=$twitter_valid?"img/twitter.png.webp":$user_connected->getTwitterPicture();
-            $linkedinPicture=$linkedin_valid?"img/linkedin.png.webp":$user_connected->getLinkedinPicture();
+            $facebookPicture=$facebook_valid?'':$user_connected->getFacebookPicture();
+            $twitterPicture=$twitter_valid?'':$user_connected->getTwitterPicture();
+            $linkedinPicture=$linkedin_valid?'':$user_connected->getLinkedinPicture();
+            $fb=$session->get('facebook_session');
+            $fb['picture']=$facebookPicture;
+            $session->set('facebook_session',$fb);
+            $tw=$session->get('twitter_session');
+            $tw['picture']=$twitterPicture;
+            $session->set('twitter_session',$tw);
+            $link=$session->get('linkedin_session');
+            $link['picture']=$linkedinPicture;
+            $session->set('linkedin_session',$link);
+
             $session->set('checked',true);
 
         }
         else{
             //accessing the route another time
-            $facebookUser = $session->get('facebook_session')?$session->get('facebook_session')['user']:null;
-            $facebookPicture = $facebookUser ? $session->get('facebook_session')['picture'] : '';
-            $twitterUser = $session->get('twitter_session')?$session->get('twitter_session')['user']:null;
-            $twitterPicture = $twitterUser ? $session->get('twitter_session')['picture'] : '';
-            $linkedinUser = $session->get('linkedin_session')?$session->get('linkedin_session')['user']:null;
-            $linkedinPicture=$linkedinUser?$session->get('linkedin_session')['picture']:'';
+            $facebookPicture =$session->get('facebook_session')['picture'];
+            $twitterPicture =$session->get('twitter_session')['picture'];
+            $linkedinPicture=$session->get('linkedin_session')['picture'];
+
 
         }
         return $this->render('social_media/index.html.twig', [
