@@ -148,6 +148,10 @@ class PostContentController extends AbstractController
                     } while ($mrc == CURLM_CALL_MULTI_PERFORM);
                 }
             }
+            if(curl_errno($mrc)){
+                $this->addFlash('curl_error', '⨂ Unknown Error,Could not post the article , please try again later');
+                return ($this->redirectToRoute("app_post_content"));
+            }
             // Close the handles
             foreach ($handles as $key => $value)
             {

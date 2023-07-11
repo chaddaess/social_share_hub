@@ -19,6 +19,14 @@
                 </div>
             {% endif %}
         {% endfor %}
+
+        {% for error in app.flashes('curl_error') %}
+            {% if error is not empty %}
+                <div class="error-message">
+                    {{ error }}
+                </div>
+            {% endif %}
+        {% endfor %}
     {{ form_start(form) }}
         {{ form_row(form.textContent,{'attr':{'class':'textArea'}}) }}
 
