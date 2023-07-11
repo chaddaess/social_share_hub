@@ -1,16 +1,16 @@
 <?php
-
+namespace App\Tests\Unit;
 use App\Controller\MyController;
 use PHPUnit\Framework\TestCase;
 class MyControllerTest extends TestCase {
 
+    private MyController $myController;
     protected function setUp(): void
     {
         parent::setUp();
         $this->myController=new MyController();
     }
 
-    private MyController $myController;
     /** @dataProvider provider*/
     public function testConcat($a,$b,$c){
 

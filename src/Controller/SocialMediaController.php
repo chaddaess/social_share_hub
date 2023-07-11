@@ -48,7 +48,6 @@ class SocialMediaController extends AbstractController
             $link=$session->get('linkedin_session');
             $link['picture']=$linkedinPicture;
             $session->set('linkedin_session',$link);
-
             $session->set('checked',true);
 
         }

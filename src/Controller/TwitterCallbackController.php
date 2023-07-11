@@ -5,6 +5,7 @@ namespace App\Controller;
 use Abraham\TwitterOAuth\TwitterOAuth;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use ErrorException;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use League\OAuth2\Client\Token\AccessToken;
 use Smolblog\OAuth2\Client\Provider\Twitter;
@@ -39,6 +40,8 @@ class TwitterCallbackController extends AbstractController
             return ($this->redirectToRoute('app_social_media', [
                 'twitter_connect_error' => "⨂ Could not connect to twitter,please try again later"
             ]));
+        }catch(ErrorException|\BadMethodCallException $e){
+            return ($this->redirectToRoute('app_social_media'));
         }
         //use the token
         try {

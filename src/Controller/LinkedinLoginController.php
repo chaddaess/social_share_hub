@@ -31,7 +31,7 @@ class LinkedinLoginController extends AbstractController
         ];
         $helper_url = $this->provider->getAuthorizationUrl($options);
         $wrong_redirection_link = "http%3A%2F%2Flocalhost%3A8000%2F%2Flinkedin-callback";
-        $correct_redirection_link = "http://localhost:8000/linkedin-callback";
+        $correct_redirection_link = urldecode("http%3A%2F%2Flocalhost%3A8000%2F%2Flinkedin-callback");
         $helper_url_modified = str_replace($wrong_redirection_link, $correct_redirection_link, $helper_url);
         return $this->redirect($helper_url_modified);
     }

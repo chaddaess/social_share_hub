@@ -14,9 +14,6 @@
                 </div>
                 {% endif %}
             {% endfor %}
-        <h2 class="title">Let's Get You Setup </h2>
-        <hr>
-        <p class="description">Connect your social media profiles</p>
         {% for error in app.flashes('connection_errors') %}
             {% if error is not empty %}
                 <div class="error-message">
@@ -24,6 +21,10 @@
                 </div>
             {% endif %}
         {% endfor %}
+        <h2 class="title">Let's Get You Setup </h2>
+        <hr>
+        <p class="description">Connect your social media profiles</p>
+
         <div class="social--media">
             <div class="social--medium">
                 {% if picture is not empty %}

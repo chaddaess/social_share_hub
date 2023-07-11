@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use ErrorException;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use League\OAuth2\Client\Provider\Facebook;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -35,7 +36,10 @@ class FacebookCallbackController extends AbstractController
                 'code' => $_GET['code']
             ]);
 
-        } catch (IdentityProviderException $e) {
+        }catch (ErrorException|\BadMethodCallException $e){
+            return ($this->redirectToRoute('app_social_media'));
+        }
+        catch (IdentityProviderException $e) {
             return ($this->redirectToRoute('app_social_media', [
                 'facebook_connect_error' => "⨂ Could not connect to facebook,please try again later"
             ]));
@@ -63,7 +67,10 @@ class FacebookCallbackController extends AbstractController
             ];
             $session->set('facebook_session',$facebookSession);
             return ($this->redirectToRoute('app_social_media'));
-        } catch (\Exception $e) {
+        }catch(\ErrorException){
+            return ($this->redirectToRoute('app_social_media'));
+        }
+        catch (\Exception $e) {
             return ($this->redirectToRoute('app_social_media', [
                 'facebook_connect_error' => "⨂ Could not connect to facebook,please try again later"
             ]));
