@@ -36,7 +36,9 @@ class TwitterCallbackController extends AbstractController
                 'code_verifier' => $request->getSession()->get('verifier'),
             ]);
         } catch (IdentityProviderException $e) {
-            dump("oops catch1");
+            return ($this->redirectToRoute('app_social_media', [
+                'twitter_connect_error' => "⨂ Could not connect to twitter,please try again later"
+            ]));
         }
         //use the token
         try {
@@ -62,9 +64,10 @@ class TwitterCallbackController extends AbstractController
             return ($this->redirectToRoute('app_social_media'));
 
         } catch (\Exception $e) {
-            dump("oops catch2");
+            return ($this->redirectToRoute('app_social_media', [
+                'twitter_connect_error' => "⨂ Could not connect to twitter,please try again later"
+            ]));
         }
-        return ($this->redirectToRoute('app_social_media'));
 
 
 

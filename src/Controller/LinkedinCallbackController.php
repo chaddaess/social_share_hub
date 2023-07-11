@@ -76,8 +76,9 @@ class LinkedinCallbackController extends AbstractController
 //            $session->set('linkedin_user', $user);
             return ($this->redirectToRoute('app_social_media'));
         } catch (\Exception $e) {
-            dd("hehe catch");
+            return ($this->redirectToRoute('app_social_media', [
+                'linkedin_connect_error' => "⨂ Could not connect to linkedin,please try again later"
+            ]));
         }
-        return ($this->redirectToRoute('app_social_media'));
     }
 }

@@ -2,23 +2,17 @@
 
 namespace App\Controller;
 
-use Abraham\TwitterOAuth\TwitterOAuthException;
 use App\Entity\Post;
 use App\Form\PostType;
 use App\Repository\UserRepository;
 use CURLFile;
 use Doctrine\Persistence\ManagerRegistry as ManagerRegistryAlias;
-use League\OAuth1\Client\Credentials\CredentialsException;
-use League\OAuth1\Client\Server\Twitter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Abraham\TwitterOAuth\TwitterOAuth;
-use GuzzleHttp\Client;
 use Symfony\Component\String\Slugger\SluggerInterface;
-use League\OAuth1\Client\Server;
 
 
 

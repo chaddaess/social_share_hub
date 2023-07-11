@@ -36,6 +36,9 @@ class FacebookCallbackController extends AbstractController
             ]);
 
         } catch (IdentityProviderException $e) {
+            return ($this->redirectToRoute('app_social_media', [
+                'facebook_connect_error' => "⨂ Could not connect to facebook,please try again later"
+            ]));
         }
 
         try {
@@ -61,8 +64,10 @@ class FacebookCallbackController extends AbstractController
             $session->set('facebook_session',$facebookSession);
             return ($this->redirectToRoute('app_social_media'));
         } catch (\Exception $e) {
+            return ($this->redirectToRoute('app_social_media', [
+                'facebook_connect_error' => "⨂ Could not connect to facebook,please try again later"
+            ]));
         }
 
-        return ($this->redirectToRoute('app_social_media'));
     }
 }

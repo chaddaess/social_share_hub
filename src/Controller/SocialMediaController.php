@@ -16,15 +16,20 @@ class SocialMediaController extends AbstractController
     public function index(Request $request ,UserRepository $userDb): Response
     {
         $session=$request->getSession();
+        //redirecting with errors or exceptions
         $postError=$request->get('error_message');
         $this->addFlash('unauthorized_access',$postError);
+        $facebookConnectError=$request->get('facebook_connect_error');
+        $linkedinConnectError=$request->get('linkedin_connect_error');
+        $twitterConnectError=$request->get('twitter_connect_error');
+        $this->addFlash('connection_errors',$facebookConnectError);
+        $this->addFlash('connection_errors',$linkedinConnectError);
+        $this->addFlash('connection_errors',$twitterConnectError);
         if (!$session->get('user_email')) {
             return ($this->redirectToRoute('app_login'));
 
         }
         $currentTimestamp = (new \DateTime())->getTimestamp();
-
-
         if(!$session->get('checked')){
             //first time accessing the route
             $user_connected = $userDb->findOneBy(['email' => $session->get('user_email')]);
