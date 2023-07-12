@@ -21,6 +21,7 @@ class PostContentController extends AbstractController
     #[Route('/post', name: 'app_post_content')]
     public function index(Request $request, ManagerRegistryAlias $doctrine, UserRepository $repository,SluggerInterface $slugger)
     {
+        $test=true;
         $session = $request->getSession();
         $choices = array();
         if (!$session->has('user_email')) {
@@ -81,7 +82,7 @@ class PostContentController extends AbstractController
             //1 Post to Twitter
             if (in_array('twitter', $socialsArray)) {
                 $url = 'https://api.twitter.com/2/tweets';
-                $access_token_tw = $session->get('twitter_session')['token'];
+                $access_token_tw=($repository->findOneBy(['email'=>$session->get('user_email')])->getTwitterToken());
                 $chTwitter = curl_init($url);
                 curl_setopt($chTwitter, CURLOPT_POST, true);
                 curl_setopt($chTwitter, CURLOPT_HTTPHEADER, [
@@ -97,7 +98,7 @@ class PostContentController extends AbstractController
 
             //2 Post to Linkedin
             if(in_array('linkedin', $socialsArray)) {
-                $access_token_link = $session->get('linkedin_session')['token'];
+                $access_token_link = ($repository->findOneBy(['email'=>$session->get('user_email')])->getLinkedinToken());
                 $userID = ($session->get('linkedin_session')['user'])->getId();
                     //post without any picture
                     $data = [
@@ -142,8 +143,29 @@ class PostContentController extends AbstractController
                     } while ($mrc == CURLM_CALL_MULTI_PERFORM);
                 }
             }
-            if(curl_errno($mrc)){
-                $this->addFlash('curl_error', '⨂ Unknown Error,Could not post the article , please try again later');
+
+            foreach ($handles as $key => $handle) {
+                $response = curl_multi_getcontent($handle);
+                $responseData = json_decode($response, true);
+                if(!$responseData){
+                    $error="unknown";
+                    $test=false;
+                    break;
+                }
+
+                 else{
+                     if(array_key_exists('status', $responseData)) {
+                         if (isset($responseData['status']) && $responseData['status'] < 200 || $responseData['status'] >= 300) {
+                             $error = $responseData['detail'];
+                             $test = false;
+                             break;
+                         }
+                     }
+                }
+
+            }
+            if(!$test){
+                $this->addFlash('curl_error', "⨂ Error:$error please try again");
                 return ($this->redirectToRoute("app_post_content"));
             }
             // Close the handles
@@ -157,19 +179,10 @@ class PostContentController extends AbstractController
             //Facebook should be  called last since we're using a redirection link rather than an api call
             if (in_array('facebook', $socialsArray)) {
                 $appId = $_ENV['FCB_ID'];
-                $link_start = strpos($text, 'http');
-                $link = '';
-                $appId = $_ENV['FCB_ID'];
-                if (!$link_start) {
+                $link=$this->extractLink($text);
+                if($link==''){
                     $this->addFlash('missing_link', '⨂ A link to your article is required');
                     return ($this->redirectToRoute("app_post_content"));
-
-                }
-                for ($i = $link_start; $i < strlen($text); $i++) {
-                    if ($text[$i] == ' ') {
-                        break;
-                    }
-                    $link .= $text[$i];
                 }
                 $manager->persist($post);
                 $manager->flush();
@@ -196,5 +209,25 @@ class PostContentController extends AbstractController
         }
 
 
+    }
+    /**
+     * this function extracts a link from a given text
+     * @param string $text
+     * @return string the link string if it exists, an empty string otherwise
+    */
+    public function extractLink(string $text):string{
+        $link_start = strpos($text, 'http');
+        $link = '';
+        if (!$link_start) {
+            return('');
+
+        }
+        for ($i = $link_start; $i < strlen($text); $i++) {
+            if ($text[$i] == ' ') {
+                break;
+            }
+            $link .= $text[$i];
+        }
+        return ($link);
     }
 }

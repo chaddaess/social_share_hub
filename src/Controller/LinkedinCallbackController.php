@@ -62,6 +62,7 @@ class LinkedinCallbackController extends AbstractController
             $user_connected->setLinkedinId($user->getId());
             $user_connected->setLinkedinPicture($profilePictureUrl);
             $user_connected->setLinkedinExpirationTime($accessToken->getExpires());
+            $user_connected->setLinkedinToken($accessToken->getToken());
             $manager->persist($user_connected);
             $manager->flush();
             //set the session

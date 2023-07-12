@@ -55,6 +55,7 @@ class TwitterCallbackController extends AbstractController
             $user_connected->setTwitterId($user->getId());
             $user_connected->setTwitterPicture($userPicture);
             $user_connected->setTwitterExpirationTime($token->getExpires());
+            $user_connected->setTwitterToken($token->getToken());
             $manager->persist($user_connected);
             $manager->flush();
             //set the session

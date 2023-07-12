@@ -68,6 +68,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $LinkedinExpirationTime = null;
 
+    #[ORM\Column(length: 1000, nullable: true)]
+    private ?string $LinkedinToken = null;
+
+    #[ORM\Column(length: 1000, nullable: true)]
+    private ?string $TwitterToken = null;
+
     public function __construct()
     {
         $this->posts = new ArrayCollection();
@@ -305,6 +311,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setLinkedinExpirationTime(?string $LinkedinExpirationTime): static
     {
         $this->LinkedinExpirationTime = $LinkedinExpirationTime;
+
+        return $this;
+    }
+
+    public function getLinkedinToken(): ?string
+    {
+        return $this->LinkedinToken;
+    }
+
+    public function setLinkedinToken(?string $LinkedinToken): static
+    {
+        $this->LinkedinToken = $LinkedinToken;
+
+        return $this;
+    }
+
+    public function getTwitterToken(): ?string
+    {
+        return $this->TwitterToken;
+    }
+
+    public function setTwitterToken(?string $TwitterToken): static
+    {
+        $this->TwitterToken = $TwitterToken;
 
         return $this;
     }
