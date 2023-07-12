@@ -45,6 +45,7 @@ class TwitterCallbackController extends AbstractController
         }
         //use the token
         try {
+            $session = $request->getSession();
             //get user's complete info
             $user = $this->provider->getResourceOwner($token);
             $userArray = $user->toArray();
@@ -58,7 +59,6 @@ class TwitterCallbackController extends AbstractController
             $manager->persist($user_connected);
             $manager->flush();
             //set the session
-            $session = $request->getSession();
             $twitterSession=[
                 'user'=>$user,
                 'picture'=>$userPicture,

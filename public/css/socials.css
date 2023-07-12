@@ -3,8 +3,6 @@ body{
 background-color: #EAE8E8;
 }
 
-
-
 .wrapper--social{
     border-radius: 5px;
     height: 40rem;
@@ -77,4 +75,32 @@ background-color: #EAE8E8;
 .socials--logo.picture.twitter{
     scale: 1.6;
     margin-top: 0.5rem
+}
+.confirm-reset{
+    height: 6rem;
+    width: 30rem;
+    border: 1px solid transparent;
+    margin-top: 10rem;
+    text-align: center;
+    margin-left: 10rem;
+    display: none;
+    background-color: #EAE8E8;
+    border-radius: 6px;
+
+}
+.confirm-button{
+    border: 1px solid transparent;
+    width: 5rem;
+    margin-right: 1rem;
+}
+
+.confirm-button.yes{
+    cursor: auto;
+}
+
+a{
+    color: red;
+}
+a:hover{
+    color: green;
 }

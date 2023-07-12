@@ -6,7 +6,7 @@ class ExtractedCodeApiCalls
 {
     public function makeCalls($socialsArray,$text,$access_token_link,$userID,$access_token_tw):bool
     {
-        $test=true;
+        $test = true;
         $mh = curl_multi_init();
         $handles = array();
         //1 Post to Twitter
@@ -26,7 +26,7 @@ class ExtractedCodeApiCalls
 
 
         //2 Post to Linkedin
-        if(in_array('linkedin', $socialsArray)) {
+        if (in_array('linkedin', $socialsArray)) {
             //post without any picture
             $data = [
                 'author' => "urn:li:person:$userID",
@@ -74,24 +74,26 @@ class ExtractedCodeApiCalls
         foreach ($handles as $key => $handle) {
             $response = curl_multi_getcontent($handle);
             $responseData = json_decode($response, true);
-            if(!$responseData){
-                $error="unknown";
-                $test=false;
+            if (!$responseData) {
+                $error = "unknown";
+                $test = false;
                 break;
-            }
-
-            else{
-                if(array_key_exists('status', $responseData)) {
+            } else {
+                if (array_key_exists('status', $responseData)) {
                     if (isset($responseData['status']) && $responseData['status'] < 200 || $responseData['status'] >= 300) {
-                        $error = $responseData['detail'];
+                        if (array_key_exists('detail', $responseData)) {
+                            $error = $responseData['detail'];
+                        } else {
+                            $error = $responseData['message'];
+                        }
                         $test = false;
                         break;
                     }
                 }
+
             }
-
         }
-       return ($test);
-    }
+        return ($test);
 
+    }
 }

@@ -74,7 +74,11 @@ class PostContentController extends AbstractController
 //                $post->setAttachedImage($newFilename);
 //                $image_path="uploads/images/$newFilename";
 //            }
-
+            $link=$this->extractLink($text);
+            if($link==''){
+                $this->addFlash('missing_link', '⨂ A link to your article is required');
+                return ($this->redirectToRoute("app_post_content"));
+            }
             //make api calls to every social media in $socialsArray to post $text
             //creating a multi call handler
             $mh = curl_multi_init();
@@ -179,16 +183,10 @@ class PostContentController extends AbstractController
                 curl_multi_remove_handle($mh, $value);
             }
             curl_multi_close($mh);
-
             //3 Post to Facebook
             //Facebook should be  called last since we're using a redirection link rather than an api call
             if (in_array('facebook', $socialsArray)) {
                 $appId = $_ENV['FCB_ID'];
-                $link=$this->extractLink($text);
-                if($link==''){
-                    $this->addFlash('missing_link', '⨂ A link to your article is required');
-                    return ($this->redirectToRoute("app_post_content"));
-                }
                 $manager->persist($post);
                 $manager->flush();
                 return ($this->redirect("https://www.facebook.com/dialog/feed?app_id=$appId&display=page&link=$link&redirect_uri=http://localhost:8000/socialmedia"));
