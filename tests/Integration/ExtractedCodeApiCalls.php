@@ -74,12 +74,24 @@ class ExtractedCodeApiCalls
         foreach ($handles as $key => $handle) {
             $response = curl_multi_getcontent($handle);
             $responseData = json_decode($response, true);
-            if (isset($responseData['status']) && $responseData['status']< 200 || $responseData['status'] >= 300) {
+            if(!$responseData){
+                $error="unknown";
                 $test=false;
                 break;
             }
+
+            else{
+                if(array_key_exists('status', $responseData)) {
+                    if (isset($responseData['status']) && $responseData['status'] < 200 || $responseData['status'] >= 300) {
+                        $error = $responseData['detail'];
+                        $test = false;
+                        break;
+                    }
+                }
+            }
+
         }
-        return($test);
+       return ($test);
     }
 
 }
