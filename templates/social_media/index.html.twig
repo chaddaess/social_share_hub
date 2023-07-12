@@ -21,6 +21,13 @@
                 </div>
             {% endif %}
         {% endfor %}
+        {% for success in app.flashes('success') %}
+            {% if success is not empty %}
+                <div class="success-message">
+                    {{ success }}
+                </div>
+            {% endif %}
+        {% endfor %}
         <h2 class="title">Let's Get You Setup </h2>
         <hr>
         <p class="description">Connect your social media profiles</p>

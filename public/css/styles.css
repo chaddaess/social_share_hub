@@ -11264,3 +11264,14 @@ body {
   padding:0.3rem;
 
 }
+.success-message{
+  width:auto;
+  height:2rem;
+  text-indent: 1rem;
+  background-color: rgba(56, 131, 5, 0.73);
+  color: white;
+  font-family: 'Poppins',sans-serif;
+  font-size: 0.9em;
+  padding:0.3rem;
+
+}

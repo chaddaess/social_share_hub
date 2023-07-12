@@ -50,7 +50,6 @@ class TwitterCallbackController extends AbstractController
             $userArray = $user->toArray();
             $userPicture = $userArray['profile_image_url'];
             //add Twitter account to current user
-            $session = $request->getSession();
             $user_connected = $userDb->findOneBy(['email' => $session->get('user_email')]);
             $user_connected->setTwitterId($user->getId());
             $user_connected->setTwitterPicture($userPicture);
@@ -59,6 +58,7 @@ class TwitterCallbackController extends AbstractController
             $manager->persist($user_connected);
             $manager->flush();
             //set the session
+            $session = $request->getSession();
             $twitterSession=[
                 'user'=>$user,
                 'picture'=>$userPicture,
@@ -66,7 +66,6 @@ class TwitterCallbackController extends AbstractController
             ];
             $session->set('twitter_session',$twitterSession);
             return ($this->redirectToRoute('app_social_media'));
-
         } catch (\Exception $e) {
             return ($this->redirectToRoute('app_social_media', [
                 'twitter_connect_error' => "⨂ Could not connect to twitter,please try again later"

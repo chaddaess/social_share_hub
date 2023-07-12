@@ -19,6 +19,7 @@ class SocialMediaController extends AbstractController
         //redirecting with errors or exceptions
         $postError=$request->get('error_message');
         $this->addFlash('unauthorized_access',$postError);
+        $this->addFlash('success',$request->get('success-posting'));
         $facebookConnectError=$request->get('facebook_connect_error');
         $linkedinConnectError=$request->get('linkedin_connect_error');
         $twitterConnectError=$request->get('twitter_connect_error');

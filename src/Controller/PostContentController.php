@@ -99,7 +99,7 @@ class PostContentController extends AbstractController
             //2 Post to Linkedin
             if(in_array('linkedin', $socialsArray)) {
                 $access_token_link = ($repository->findOneBy(['email'=>$session->get('user_email')])->getLinkedinToken());
-                $userID = ($session->get('linkedin_session')['user'])->getId();
+                $userID = $repository->findOneBy(['email'=>$session->get('user_email')])->getLinkedinId();
                     //post without any picture
                     $data = [
                         'author' => "urn:li:person:$userID",
@@ -156,7 +156,12 @@ class PostContentController extends AbstractController
                  else{
                      if(array_key_exists('status', $responseData)) {
                          if (isset($responseData['status']) && $responseData['status'] < 200 || $responseData['status'] >= 300) {
-                             $error = $responseData['detail'];
+                             if(array_key_exists('detail', $responseData)){
+                                 $error=$responseData['detail'];
+                             }
+                             else{
+                                 $error=$responseData['message'];
+                             }
                              $test = false;
                              break;
                          }
@@ -190,7 +195,9 @@ class PostContentController extends AbstractController
             }
             $manager->persist($post);
             $manager->flush();
-            return ($this->redirectToRoute("app_social_media"));
+            return ($this->redirectToRoute("app_social_media",[
+                'success-posting'=>'✅article posted successfully'
+            ]));
         } else {
             $options=[];
             $i=0;
