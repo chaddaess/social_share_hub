@@ -58,7 +58,6 @@ class SocialMediaController extends AbstractController
             $twitterPicture =$session->get('twitter_session')['picture'];
             $linkedinPicture=$session->get('linkedin_session')['picture'];
 
-
         }
         return $this->render('social_media/index.html.twig', [
             'controller_name' => 'SocialMediaController',

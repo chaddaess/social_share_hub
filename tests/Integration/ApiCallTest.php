@@ -12,6 +12,7 @@ use Symfony\Bundle\MakerBundle\Str;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
+
 class ApiCallTest extends TestCase
 {
     private ExtractedCodeApiCalls $testObject;
@@ -38,6 +39,9 @@ class ApiCallTest extends TestCase
     /**
      * @throws Exception
      */
+
+    //⚠️this test  method will ACTUALLY make the API CALL
+    //when provided with correct data
     public function testMakeCallWithWrongTokens(){
         $text=$this->text;
         $socialsArray=$this->socialsArray;
