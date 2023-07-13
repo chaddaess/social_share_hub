@@ -1,15 +1,10 @@
 <?php
 
-namespace App\Tests\Unit\Controller;
+namespace App\Tests\Integration;
 
 use App\Controller\FacebookCallbackController;
 use App\Controller\FacebookLoginController;
 use App\Entity\User;
-use App\Repository\UserRepository;
-use BadMethodCallException;
-use Doctrine\ORM\EntityManagerInterface;
-use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
-use Monolog\Test\TestCase;
 use PHPUnit\Framework\MockObject\Exception;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;

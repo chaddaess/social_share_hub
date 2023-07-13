@@ -90,6 +90,7 @@ class ResetSocialsTest extends WebTestCase
         $this->assertNull($dBuser->getLinkedinId());
         $this->assertEmpty($dBuser->getLinkedinPicture());
         $this->assertNull($dBuser->getLinkedinExpirationTime());
+        $this->assertNull($dBuser->getLinkedinToken());
         //delete the mock data from database
         $manager->remove($dBuser);
         $manager->flush();
@@ -120,6 +121,8 @@ class ResetSocialsTest extends WebTestCase
         $this->assertNull($dBuser->getTwitterId());
         $this->assertEmpty($dBuser->getTwitterPicture());
         $this->assertNull($dBuser->getTwitterExpirationTime());
+        $this->assertNull($dBuser->getTwitterToken());
+
         //delete the mock data from database
         $manager->remove($dBuser);
         $manager->flush();

@@ -32,6 +32,7 @@ class ResetSocialsController extends AbstractController
         $user_connected->setLinkedinId(null);
         $user_connected->setLinkedinPicture('');
         $user_connected->setLinkedinExpirationTime(null);
+        $user_connected->setLinkedinToken(null);
         $manager->persist($user_connected);
         $manager->flush();
         $session->set('linkedin_session',['picture'=>'']);
@@ -45,6 +46,7 @@ class ResetSocialsController extends AbstractController
         $user_connected->setTwitterId(null);
         $user_connected->setTwitterPicture('');
         $user_connected->setTwitterExpirationTime(null);
+        $user_connected->setTwitterToken(null);
         $manager->persist($user_connected);
         $manager->flush();
         $session->set('twitter_session',['picture'=>'']);
