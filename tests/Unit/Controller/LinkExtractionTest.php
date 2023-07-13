@@ -5,7 +5,7 @@ namespace App\Tests\Unit\Controller;
 use App\Controller\PostContentController;
 use Monolog\Test\TestCase;
 
-class PostContentControllerTest extends TestCase
+class LinkExtractionTest extends TestCase
 {
     private PostContentController $testObject;
 
