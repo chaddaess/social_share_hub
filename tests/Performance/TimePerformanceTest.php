@@ -91,4 +91,54 @@ class TimePerformanceTest extends WebTestCase
         }
 
     }
+    public function testFacebookLoginRedirectTimeUnder500()
+    {
+        $client = static::createClient();
+        $client->enableProfiler();
+        $request = new Request();
+        $request->setSession(new Session());
+        $session = $request->getSession();
+        $crawler = $client->request('GET', '/facebook/login');
+        if ($profile = $client->getProfile()) {
+            // check the number of requests
+            $this->assertLessThan(
+                500, $profile->getCollector('time')->getDuration()
+            );
+        }
+
+    }
+
+    public function testLinkedinLoginRedirectTimeUnder500()
+    {
+        $client = static::createClient();
+        $client->enableProfiler();
+        $request = new Request();
+        $request->setSession(new Session());
+        $session = $request->getSession();
+        $crawler = $client->request('GET', '/linkedin/login');
+        if ($profile = $client->getProfile()) {
+            // check the number of requests
+            $this->assertLessThan(
+                500, $profile->getCollector('time')->getDuration()
+            );
+        }
+
+    }
+
+    public function testTwitterLoginRedirectTimeUnder500()
+    {
+        $client = static::createClient();
+        $client->enableProfiler();
+        $request = new Request();
+        $request->setSession(new Session());
+        $session = $request->getSession();
+        $crawler = $client->request('GET', '/twitter/login');
+        if ($profile = $client->getProfile()) {
+            // check the number of requests
+            $this->assertLessThan(
+                500, $profile->getCollector('time')->getDuration()
+            );
+        }
+
+    }
 }
