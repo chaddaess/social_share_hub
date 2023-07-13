@@ -22,8 +22,10 @@ class PostContentControllerTest extends TestCase
     }
     public static function provider():array {
         return([
-            ["hihttps://www.google.com/","https://www.google.com/"],//should pass
-            ["amal","https://www.google.com/"],//should fail
+            [" hihttps://www.google.com/","https://www.google.com/"],//should pass
+            ['https://www.goodreads.com/','https://www.goodreads.com/'],//should pass
+            ['amal','']//should pass
+
         ]);
     }
 

@@ -189,7 +189,7 @@ class PostContentController extends AbstractController
                 $appId = $_ENV['FCB_ID'];
                 $manager->persist($post);
                 $manager->flush();
-                return ($this->redirect("https://www.facebook.com/dialog/feed?app_id=$appId&display=page&link=$link&redirect_uri=http://localhost:8000/socialmedia"));
+                return ($this->redirect("https://www.facebook.com/dialog/feed?app_id=$appId&display=page&link=$link&redirect_uri=http://localhost:8000/socialmedia?success-posting=✓article%20posted%20successfully"));
             }
             $manager->persist($post);
             $manager->flush();
@@ -221,6 +221,7 @@ class PostContentController extends AbstractController
      * @return string the link string if it exists, an empty string otherwise
     */
     public function extractLink(string $text):string{
+        $text=' '.$text;
         $link_start = strpos($text, 'http');
         $link = '';
         if (!$link_start) {

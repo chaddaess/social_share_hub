@@ -29,8 +29,6 @@ class LinkedinCallbackController extends AbstractController
     #[Route('/linkedin-callback', name: 'app_linkedin_callback')]
     public function index(UserRepository $userDb, EntityManagerInterface $manager, Request $request): Response
     {
-
-
         try {
             $accessToken = $this->provider->getAccessToken('authorization_code', [
                 'code' => $_GET['code']
@@ -73,8 +71,6 @@ class LinkedinCallbackController extends AbstractController
 
             ];
             $session->set('linkedin_session',$linkedin_session);
-//            $session->set('linkedin_user_picture', $profilePictureUrl);
-//            $session->set('linkedin_user', $user);
             return ($this->redirectToRoute('app_social_media'));
         } catch(\ErrorException){
             return ($this->redirectToRoute('app_social_media'));
