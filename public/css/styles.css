@@ -11255,7 +11255,7 @@ body {
 
 .error-message{
   width:auto;
-  height:2rem;
+  height:auto;
   text-indent: 1rem;
   background-color: #cc0000;
   color: white;
