@@ -57,12 +57,12 @@ class ResetSocialsTest extends WebTestCase
         $response = $this->resetSocialsController->resetFacebook($repository, $manager, $request);
         //test the output
         $this->assertInstanceOf(Response::class, $response);
-        $this->user = $repository->findOneBy(['email' => 'test@example.com']);
-        $this->assertNull($this->user->getFacebookId());
-        $this->assertEmpty($this->user->getFacebookPicture());
-        $this->assertNull($this->user->getFacebookExpirationTime());
+        $dBuser = $repository->findOneBy(['email' => 'test@example.com']);
+        $this->assertNull($dBuser->getFacebookId());
+        $this->assertEmpty($dBuser->getFacebookPicture());
+        $this->assertNull($dBuser->getFacebookExpirationTime());
         //delete the mock data from database
-        $manager->remove($this->user);
+        $manager->remove($dBuser);
         $manager->flush();
 
     }
@@ -86,12 +86,12 @@ class ResetSocialsTest extends WebTestCase
         $response = $this->resetSocialsController->resetLinkedin($repository, $manager, $request);
         //test the output
         $this->assertInstanceOf(Response::class, $response);
-        $this->user = $repository->findOneBy(['email' => 'test@example.com']);
-        $this->assertNull($this->user->getLinkedinId());
-        $this->assertEmpty($this->user->getLinkedinPicture());
-        $this->assertNull($this->user->getLinkedinExpirationTime());
+        $dBuser = $repository->findOneBy(['email' => 'test@example.com']);
+        $this->assertNull($dBuser->getLinkedinId());
+        $this->assertEmpty($dBuser->getLinkedinPicture());
+        $this->assertNull($dBuser->getLinkedinExpirationTime());
         //delete the mock data from database
-        $manager->remove($this->user);
+        $manager->remove($dBuser);
         $manager->flush();
 
     }
@@ -116,12 +116,12 @@ class ResetSocialsTest extends WebTestCase
         $response = $this->resetSocialsController->resetTwitter($repository, $manager, $request);
         //test the output
         $this->assertInstanceOf(Response::class, $response);
-        $this->user = $repository->findOneBy(['email' => 'test@example.com']);
-        $this->assertNull($this->user->getTwitterId());
-        $this->assertEmpty($this->user->getTwitterPicture());
-        $this->assertNull($this->user->getTwitterExpirationTime());
+        $dBuser = $repository->findOneBy(['email' => 'test@example.com']);
+        $this->assertNull($dBuser->getTwitterId());
+        $this->assertEmpty($dBuser->getTwitterPicture());
+        $this->assertNull($dBuser->getTwitterExpirationTime());
         //delete the mock data from database
-        $manager->remove($this->user);
+        $manager->remove($dBuser);
         $manager->flush();
 
     }
