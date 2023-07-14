@@ -79,6 +79,11 @@ class PostContentController extends AbstractController
                 $this->addFlash('missing_link', '⨂ A link to your article is required');
                 return ($this->redirectToRoute("app_post_content"));
             }
+            if(count($socialsArray)==0)
+            {
+                $this->addFlash('curl_error', "⨂ please choose an account");
+                return ($this->redirectToRoute("app_post_content"));
+            }
             //make api calls to every social media in $socialsArray to post $text
             //creating a multi call handler
             $mh = curl_multi_init();
@@ -191,6 +196,7 @@ class PostContentController extends AbstractController
                 $manager->flush();
                 return ($this->redirect("https://www.facebook.com/dialog/feed?app_id=$appId&display=page&link=$link&redirect_uri=http://localhost:8000/socialmedia?success-posting=✓article%20posted%20successfully"));
             }
+
             $manager->persist($post);
             $manager->flush();
             return ($this->redirectToRoute("app_social_media",[

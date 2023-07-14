@@ -22,9 +22,11 @@ class LinkExtractionTest extends TestCase
     }
     public static function provider():array {
         return([
-            [" hihttps://www.google.com/","https://www.google.com/"],//should pass
+            ["hihttps://www.google.com/","https://www.google.com/"],//should pass
             ['https://www.goodreads.com/','https://www.goodreads.com/'],//should pass
-            ['amal','']//should pass
+            ['amal',''],//should pass
+            ['',''],
+            ['htt',''],
 
         ]);
     }
