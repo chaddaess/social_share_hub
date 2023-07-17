@@ -27,6 +27,8 @@ class LinkExtractionTest extends TestCase
             ['amal',''],//should pass
             ['',''],
             ['htt',''],
+            ['hihttps://google.comhi','https://google.comhi'],
+            ['hihttps://google.com hi','https://google.com']
 
         ]);
     }

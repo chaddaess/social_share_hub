@@ -21,7 +21,11 @@
                     </p>
                     <a href="{{ post.link }}">
                         <div class="link">
-                            <img src="{{ post.image }}" class="article--image"/>
+                            {% if post.domain=="www.jawharafm.net" %}
+                            <img src="{{ "https://www.jawharafm.net"~post.image }}" class="article--image"/>
+                            {% else %}
+                                <img src="{{ post.image }}" class="article--image"/>
+                            {% endif %}
                             <div class="info">
                                 <p class="link--title">{{ post.title }}</p>
                                 <p class="domain">{{ post.domain }}</p>

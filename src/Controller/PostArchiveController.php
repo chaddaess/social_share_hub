@@ -30,14 +30,4 @@ class PostArchiveController extends AbstractController
         ]);
     }
 
-    /**
-     * this function extracts the domain of the website and the title or the article from the article's url
-     * @param string $link:the link to be searched
-     * @return array:key=>value array containing the extracted information
-     */
-
-
-
-
-
 }

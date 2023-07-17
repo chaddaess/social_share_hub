@@ -9,13 +9,14 @@ use CURLFile;
 use Doctrine\Persistence\ManagerRegistry as ManagerRegistryAlias;
 use DOMDocument;
 use mysql_xdevapi\Exception;
+use PHPUnit\Framework\Error;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
-
+use ValueError;
 
 
 class PostContentController extends AbstractController
@@ -216,9 +217,11 @@ class PostContentController extends AbstractController
 
     }
     /**
-     * this function extracts a link from a given text
+     *  extracts a URL from a given text
+     *
+     * an empty string is returned if no  http/https URL is found
      * @param string $text
-     * @return string the link string if it exists, an empty string otherwise
+     * @return string the link exctracted from the input string
     */
     public function extractLink(string $text):string{
         $text=' '.$text;
@@ -238,8 +241,16 @@ class PostContentController extends AbstractController
     }
 
     /**
-     * this function will extract the main picture from a given website
-    */
+     * Extracts the URL of the main picture from a given website.
+     *
+     * If no image is found or if an error occurs while retrieving or parsing the HTML content, a default picture is returned.
+     *
+     * @param string $url The URL of the website to scan for a picture.
+     *
+     * @return string The URL of the main picture in the website, or a default picture if no image is found or if an error occurs.
+     *
+     * @throws Exception If there is an error while retrieving or parsing the HTML content of the URL.
+     */
     public function extractPicture($url){
         try {
             $html = file_get_contents($url);
@@ -274,8 +285,8 @@ class PostContentController extends AbstractController
 
 
             }
-        }catch (Exception $e){
-            $largestImage="img/article.png";
+        }catch (\Exception|ValueError $e){
+            return("img/article.png");
         }
         if($largestImage==""){
             $largestImage="img/article.png";
@@ -284,16 +295,27 @@ class PostContentController extends AbstractController
     }
 
     /**
-     * this function extends non-link content from a string
-     * @param string $text: string to be searched
-     * @return string: text content that is NOT part of a link
+     * extracts text content that is not part of a URL from a string .
+     * @param string $text string to be extract text from.
+     * @return string  text content of the input string that is NOT part of a URL.
      */
     public function extractText(string $text):string{
         $link=$this->extractLink($text);
         $textContent=str_replace($link,"",$text);
-        return($textContent);
+        return(trim($textContent));
     }
 
+    /**
+     * Extracts the domain and title of an article from its URL.
+     *
+     * If no title is found or if an error occurs while retrieving or parsing the HTML content, '404 not found' is returned as title
+     * @param string $link The URL of the article to extract information from.
+     *
+     * @return array An associative array containing the extracted domain and title.
+     * The keys of the array are "domain" and "title".
+     *
+     * @throws Exception If there is an error while retrieving or parsing the HTML content of the URL.
+     */
     public function extractInfoLink($link):array{
         try{
             $html = file_get_contents($link);
@@ -302,14 +324,18 @@ class PostContentController extends AbstractController
             $title = $doc->getElementsByTagName('title')->item(0)->nodeValue;
             $parsedUrl = parse_url($link);
             $domain = $parsedUrl['host'];
-        }catch (\Exception $e){
-            $domain="uknown";
+        }catch (\Exception|ValueError $e){
+            $domain="unknown";
             $title="404 not found";
+            return([
+                "domain"=>trim($domain),
+                "title"=>trim($title),
+            ]);
         }
 
         return([
-            "domain"=>$domain,
-            "title"=>$title,
+            "domain"=>trim($domain),
+            "title"=>trim($title),
         ]);
     }
 }
