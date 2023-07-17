@@ -30,6 +30,21 @@ class Post
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $attachedImage = null;
 
+    #[ORM\Column(length: 1000, nullable: true)]
+    private ?string $image = null;
+
+    #[ORM\Column(length: 1000, nullable: true)]
+    private ?string $link = null;
+
+    #[ORM\Column(length: 10000, nullable: true)]
+    private ?string $text = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $domain = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $title = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -91,6 +106,66 @@ class Post
     public function setAttachedImage(?string $attachedImage): static
     {
         $this->attachedImage = $attachedImage;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): static
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    public function getLink(): ?string
+    {
+        return $this->link;
+    }
+
+    public function setLink(?string $link): static
+    {
+        $this->link = $link;
+
+        return $this;
+    }
+
+    public function getText(): ?string
+    {
+        return $this->text;
+    }
+
+    public function setText(?string $text): static
+    {
+        $this->text = $text;
+
+        return $this;
+    }
+
+    public function getDomain(): ?string
+    {
+        return $this->domain;
+    }
+
+    public function setDomain(?string $domain): static
+    {
+        $this->domain = $domain;
+
+        return $this;
+    }
+
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(string $title): static
+    {
+        $this->title = $title;
 
         return $this;
     }

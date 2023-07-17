@@ -7,6 +7,8 @@ use App\Form\PostType;
 use App\Repository\UserRepository;
 use CURLFile;
 use Doctrine\Persistence\ManagerRegistry as ManagerRegistryAlias;
+use DOMDocument;
+use mysql_xdevapi\Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
@@ -50,31 +52,23 @@ class PostContentController extends AbstractController
         ]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            //get form input data
+            $socialsArray = ($form->getData()->getPostedOn());
+            $text = $form->getData()->getTextContent();
             //set up post
             $currentTimeStamp = new \DateTime();
             $post->setPostTime($currentTimeStamp);
             $user = $repository->findOneBy(['email' => $session->get('user_email')]);
             $post->setUser($user);
-            $manager = $doctrine->getManager();
-            $socialsArray = ($form->getData()->getPostedOn());
-            $text = $form->getData()->getTextContent();
-            //image upload,cancelled
-            //$brochureFile = $form->get('image')->getData();
-//            if ($brochureFile) {
-//                $originalFilename = pathinfo($brochureFile->getClientOriginalName(), PATHINFO_FILENAME);
-//                $safeFilename = $slugger->slug($originalFilename);
-//                $newFilename = $safeFilename.'-'.uniqid().'.'.$brochureFile->guessExtension();
-//                try {
-//                    $brochureFile->move(
-//                        $this->getParameter('images_directory'),
-//                        $newFilename
-//                    );
-//                } catch (FileException $e) {
-//                }
-//                $post->setAttachedImage($newFilename);
-//                $image_path="uploads/images/$newFilename";
-//            }
             $link=$this->extractLink($text);
+            $post->setLink($link);
+            $post->setImage($this->extractPicture($link));
+            $post->setText($this->extractText($text));
+            $post_info=$this->extractInfoLink($link);
+            $post->setDomain($post_info['domain']);
+            $post->setTitle($post_info['title']);
+            $manager = $doctrine->getManager();
+
             if($link==''){
                 $this->addFlash('missing_link', '⨂ A link to your article is required');
                 return ($this->redirectToRoute("app_post_content"));
@@ -241,5 +235,81 @@ class PostContentController extends AbstractController
             $link .= $text[$i];
         }
         return ($link);
+    }
+
+    /**
+     * this function will extract the main picture from a given website
+    */
+    public function extractPicture($url){
+        try {
+            $html = file_get_contents($url);
+            $doc = new DOMDocument();
+            @$doc->loadHTML($html);
+            $imageTags = $doc->getElementsByTagName('img');
+            $largestImage = '';
+            $largestSize = 0;
+            foreach ($imageTags as $tag) {
+                $src = $tag->getAttribute('src');
+                if ($src) {
+                    $width = intval($tag->getAttribute('width'));
+                    $height = intval($tag->getAttribute('height'));
+                    $size = $width * $height;
+                    if ($size > $largestSize) {
+                        $largestSize = $size;
+                        $largestImage = $src;
+                    }
+                }
+                $srcset = $tag->getAttribute('data-srcset');
+                if (!empty($srcset)) {
+                    $sources = explode(',', $srcset);
+                    foreach ($sources as $source) {
+                        list($url, $size) = explode(' ', trim($source));
+                        $size = intval($size);
+                        if ($size > $largestSize) {
+                            $largestSize = $size;
+                            $largestImage = $url;
+                        }
+                    }
+                }
+
+
+            }
+        }catch (Exception $e){
+            $largestImage="img/article.png";
+        }
+        if($largestImage==""){
+            $largestImage="img/article.png";
+        }
+        return $largestImage;
+    }
+
+    /**
+     * this function extends non-link content from a string
+     * @param string $text: string to be searched
+     * @return string: text content that is NOT part of a link
+     */
+    public function extractText(string $text):string{
+        $link=$this->extractLink($text);
+        $textContent=str_replace($link,"",$text);
+        return($textContent);
+    }
+
+    public function extractInfoLink($link):array{
+        try{
+            $html = file_get_contents($link);
+            $doc = new DOMDocument();
+            @$doc->loadHTML($html);
+            $title = $doc->getElementsByTagName('title')->item(0)->nodeValue;
+            $parsedUrl = parse_url($link);
+            $domain = $parsedUrl['host'];
+        }catch (\Exception $e){
+            $domain="uknown";
+            $title="404 not found";
+        }
+
+        return([
+            "domain"=>$domain,
+            "title"=>$title,
+        ]);
     }
 }

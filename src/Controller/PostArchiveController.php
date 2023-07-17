@@ -5,6 +5,9 @@ namespace App\Controller;
 use App\Repository\PostRepository;
 use App\Repository\UserRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use DOMDocument;
+use http\Exception\RuntimeException;
+use mysql_xdevapi\Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,7 +18,6 @@ class PostArchiveController extends AbstractController
     #[Route('/archive', name: 'app_post_archive')]
     public function index(ManagerRegistry $doctrine,PostRepository $postRepository,Request $request,UserRepository $userRepository): Response
     {
-
         $session=$request->getSession();
         if(!$session->has('user_email'))
         {
@@ -27,4 +29,15 @@ class PostArchiveController extends AbstractController
             'posts'=>$posts
         ]);
     }
+
+    /**
+     * this function extracts the domain of the website and the title or the article from the article's url
+     * @param string $link:the link to be searched
+     * @return array:key=>value array containing the extracted information
+     */
+
+
+
+
+
 }

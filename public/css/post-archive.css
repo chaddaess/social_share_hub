@@ -52,6 +52,7 @@ hr{
     background-color: whitesmoke;
     margin-left: 7rem;
     white-space: normal;
+    padding: 1rem;
 
 }
 
@@ -65,4 +66,35 @@ hr{
     display:flex;
     align-items: center;
     padding: 1rem;
+}
+
+.link{
+    width: 90%;
+    border: 1px solid black;
+    border-radius: 6px;
+    padding: 1rem;
+    background-color: white;
+    height: auto;
+    display: flex;
+    flex-direction: row;
+}
+.link--title{
+    text-align: right;
+}
+.domain{
+    font-size: 10px;
+    color: grey;
+    text-align: right;
+
+}
+.info{
+    margin-left: 45%;
+}
+.link--title{
+    font-size: 1.25em;
+}
+.article--image{
+    max-width: 15rem;
+    height: 12rem;
+    border-radius: 12px;
 }

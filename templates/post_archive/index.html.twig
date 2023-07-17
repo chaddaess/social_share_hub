@@ -15,9 +15,21 @@
     {% for post in posts %}
             <div class="post-box">
                 <p class="title">Post:</p>
-                <p class="post--body">
-                    {{ post.textContent }}
-                </p>
+                <div class="post--body">
+                    <p class="description">
+                        {{ post.text }}
+                    </p>
+                    <a href="{{ post.link }}">
+                        <div class="link">
+                            <img src="{{ post.image }}" class="article--image"/>
+                            <div class="info">
+                                <p class="link--title">{{ post.title }}</p>
+                                <p class="domain">{{ post.domain }}</p>
+                            </div>
+
+                        </div>
+                    </a>
+                </div>
                 <hr>
                 <p class="title">Social platforms:</p>
                 <div class="socials">
