@@ -22,9 +22,9 @@ use ValueError;
 class PostContentController extends AbstractController
 {
     #[Route('/post', name: 'app_post_content')]
-    public function index(Request $request, ManagerRegistryAlias $doctrine, UserRepository $repository,SluggerInterface $slugger)
+    public function index(Request $request, ManagerRegistryAlias $doctrine, UserRepository $repository, SluggerInterface $slugger)
     {
-        $test=true;
+        $test = true;
         $session = $request->getSession();
         $choices = array();
         if (!$session->has('user_email')) {
@@ -32,13 +32,13 @@ class PostContentController extends AbstractController
                 'error_message' => "⨂ Please sign in to post on your social media"
             ]));
         }
-        if ($session->get('facebook_session')['picture']!='') {
+        if ($session->get('facebook_session')['picture'] != '') {
             $choices[$session->get('facebook_session')['picture']] = 'facebook';
         }
-        if ($session->get('twitter_session')['picture']!='') {
+        if ($session->get('twitter_session')['picture'] != '') {
             $choices[$session->get('twitter_session')['picture']] = 'twitter';
         }
-        if ($session->get('linkedin_session')['picture']!='') {
+        if ($session->get('linkedin_session')['picture'] != '') {
             $choices[$session->get('linkedin_session')['picture']] = 'linkedin';
         }
 
@@ -61,21 +61,20 @@ class PostContentController extends AbstractController
             $post->setPostTime($currentTimeStamp);
             $user = $repository->findOneBy(['email' => $session->get('user_email')]);
             $post->setUser($user);
-            $link=$this->extractLink($text);
+            $link = $this->extractLink($text);
             $post->setLink($link);
             $post->setImage($this->extractPicture($link));
             $post->setText($this->extractText($text));
-            $post_info=$this->extractInfoLink($link);
+            $post_info = $this->extractInfoLink($link);
             $post->setDomain($post_info['domain']);
             $post->setTitle($post_info['title']);
             $manager = $doctrine->getManager();
 
-            if($link==''){
+            if ($link == '') {
                 $this->addFlash('missing_link', '⨂ A link to your article is required');
                 return ($this->redirectToRoute("app_post_content"));
             }
-            if(count($socialsArray)==0)
-            {
+            if (count($socialsArray) == 0) {
                 $this->addFlash('curl_error', "⨂ please choose an account");
                 return ($this->redirectToRoute("app_post_content"));
             }
@@ -86,7 +85,7 @@ class PostContentController extends AbstractController
             //1 Post to Twitter
             if (in_array('twitter', $socialsArray)) {
                 $url = 'https://api.twitter.com/2/tweets';
-                $access_token_tw=($repository->findOneBy(['email'=>$session->get('user_email')])->getTwitterToken());
+                $access_token_tw = ($repository->findOneBy(['email' => $session->get('user_email')])->getTwitterToken());
                 $chTwitter = curl_init($url);
                 curl_setopt($chTwitter, CURLOPT_POST, true);
                 curl_setopt($chTwitter, CURLOPT_HTTPHEADER, [
@@ -101,41 +100,41 @@ class PostContentController extends AbstractController
 
 
             //2 Post to Linkedin
-            if(in_array('linkedin', $socialsArray)) {
-                $access_token_link = ($repository->findOneBy(['email'=>$session->get('user_email')])->getLinkedinToken());
-                $userID = $repository->findOneBy(['email'=>$session->get('user_email')])->getLinkedinId();
-                    //post without any picture
-                    $data = [
-                        'author' => "urn:li:person:$userID",
-                        'lifecycleState' => 'PUBLISHED',
-                        'specificContent' => [
-                            'com.linkedin.ugc.ShareContent' => [
-                                'shareCommentary' => [
-                                    'text' => $text
-                                ],
-                                'shareMediaCategory' => 'NONE'
-                            ]
-                        ],
-                        'visibility' => [
-                            'com.linkedin.ugc.MemberNetworkVisibility' => 'PUBLIC'
-                        ],
-                    ];
-                    $data_json = json_encode($data);
-                    $chLinkedin = curl_init();
-                    curl_setopt($chLinkedin, CURLOPT_URL, "https://api.linkedin.com/v2/ugcPosts");
-                    curl_setopt($chLinkedin, CURLOPT_POST, 1);
-                    curl_setopt($chLinkedin, CURLOPT_POSTFIELDS, $data_json);
-                    curl_setopt($chLinkedin, CURLOPT_RETURNTRANSFER, true);
-                    curl_setopt($chLinkedin, CURLOPT_HTTPHEADER, array(
-                        'Content-Type: application/json',
-                        'Authorization: Bearer ' . $access_token_link,
-                        'X-Restli-Protocol-Version: 2.0.0'
-                    ));
-                    curl_multi_add_handle($mh, $chLinkedin);
-                    $handles['linkedinHandler'] = $chLinkedin;
-                }
+            if (in_array('linkedin', $socialsArray)) {
+                $access_token_link = ($repository->findOneBy(['email' => $session->get('user_email')])->getLinkedinToken());
+                $userID = $repository->findOneBy(['email' => $session->get('user_email')])->getLinkedinId();
+                //post without any picture
+                $data = [
+                    'author' => "urn:li:person:$userID",
+                    'lifecycleState' => 'PUBLISHED',
+                    'specificContent' => [
+                        'com.linkedin.ugc.ShareContent' => [
+                            'shareCommentary' => [
+                                'text' => $text
+                            ],
+                            'shareMediaCategory' => 'NONE'
+                        ]
+                    ],
+                    'visibility' => [
+                        'com.linkedin.ugc.MemberNetworkVisibility' => 'PUBLIC'
+                    ],
+                ];
+                $data_json = json_encode($data);
+                $chLinkedin = curl_init();
+                curl_setopt($chLinkedin, CURLOPT_URL, "https://api.linkedin.com/v2/ugcPosts");
+                curl_setopt($chLinkedin, CURLOPT_POST, 1);
+                curl_setopt($chLinkedin, CURLOPT_POSTFIELDS, $data_json);
+                curl_setopt($chLinkedin, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($chLinkedin, CURLOPT_HTTPHEADER, array(
+                    'Content-Type: application/json',
+                    'Authorization: Bearer ' . $access_token_link,
+                    'X-Restli-Protocol-Version: 2.0.0'
+                ));
+                curl_multi_add_handle($mh, $chLinkedin);
+                $handles['linkedinHandler'] = $chLinkedin;
+            }
 
-             //Execute the requests in parallel
+            //Execute the requests in parallel
             do {
                 $mrc = curl_multi_exec($mh, $active);
             } while ($mrc == CURLM_CALL_MULTI_PERFORM);
@@ -151,35 +150,31 @@ class PostContentController extends AbstractController
             foreach ($handles as $key => $handle) {
                 $response = curl_multi_getcontent($handle);
                 $responseData = json_decode($response, true);
-                if(!$responseData){
-                    $error="unknown";
-                    $test=false;
+                if (!$responseData) {
+                    $error = "unknown";
+                    $test = false;
                     break;
-                }
-
-                 else{
-                     if(array_key_exists('status', $responseData)) {
-                         if (isset($responseData['status']) && $responseData['status'] < 200 || $responseData['status'] >= 300) {
-                             if(array_key_exists('detail', $responseData)){
-                                 $error=$responseData['detail'];
-                             }
-                             else{
-                                 $error=$responseData['message'];
-                             }
-                             $test = false;
-                             break;
-                         }
-                     }
+                } else {
+                    if (array_key_exists('status', $responseData)) {
+                        if (isset($responseData['status']) && $responseData['status'] < 200 || $responseData['status'] >= 300) {
+                            if (array_key_exists('detail', $responseData)) {
+                                $error = $responseData['detail'];
+                            } else {
+                                $error = $responseData['message'];
+                            }
+                            $test = false;
+                            break;
+                        }
+                    }
                 }
 
             }
-            if(!$test){
+            if (!$test) {
                 $this->addFlash('curl_error', "⨂ Error:$error please try again");
                 return ($this->redirectToRoute("app_post_content"));
             }
             // Close the handles
-            foreach ($handles as $key => $value)
-            {
+            foreach ($handles as $key => $value) {
                 curl_multi_remove_handle($mh, $value);
             }
             curl_multi_close($mh);
@@ -194,41 +189,43 @@ class PostContentController extends AbstractController
 
             $manager->persist($post);
             $manager->flush();
-            return ($this->redirectToRoute("app_social_media",[
-                'success-posting'=>'✅article posted successfully'
+            return ($this->redirectToRoute("app_social_media", [
+                'success-posting' => '✅article posted successfully'
             ]));
         } else {
-            $options=[];
-            $i=0;
-            foreach ($choices as $key=>$value){
-                if($key)
-                {   $options[$i]=$value;
+            $options = [];
+            $i = 0;
+            foreach ($choices as $key => $value) {
+                if ($key) {
+                    $options[$i] = $value;
                     $i++;
 
                 }
             }
             return $this->render('post_content/index.html.twig', [
                 'form' => $form->createView(),
-                'options'=>$options,
+                'options' => $options,
 
             ]);
         }
 
 
     }
+
     /**
      *  extracts a URL from a given text
      *
      * an empty string is returned if no  http/https URL is found
      * @param string $text
      * @return string the link exctracted from the input string
-    */
-    public function extractLink(string $text):string{
-        $text=' '.$text;
+     */
+    public function extractLink(string $text): string
+    {
+        $text = ' ' . $text;
         $link_start = strpos($text, 'http');
         $link = '';
         if (!$link_start) {
-            return('');
+            return ('');
 
         }
         for ($i = $link_start; $i < strlen($text); $i++) {
@@ -251,7 +248,8 @@ class PostContentController extends AbstractController
      *
      * @throws Exception If there is an error while retrieving or parsing the HTML content of the URL.
      */
-    public function extractPicture($url){
+    public function extractPicture($url)
+    {
         try {
             $html = file_get_contents($url);
             $doc = new DOMDocument();
@@ -285,11 +283,11 @@ class PostContentController extends AbstractController
 
 
             }
-        }catch (\Exception|ValueError $e){
-            return("img/article.png");
+        } catch (\Exception|ValueError $e) {
+            return ("img/article.png");
         }
-        if($largestImage==""){
-            $largestImage="img/article.png";
+        if ($largestImage == "") {
+            $largestImage = "img/article.png";
         }
         return $largestImage;
     }
@@ -299,10 +297,11 @@ class PostContentController extends AbstractController
      * @param string $text string to be extract text from.
      * @return string  text content of the input string that is NOT part of a URL.
      */
-    public function extractText(string $text):string{
-        $link=$this->extractLink($text);
-        $textContent=str_replace($link,"",$text);
-        return(trim($textContent));
+    public function extractText(string $text): string
+    {
+        $link = $this->extractLink($text);
+        $textContent = str_replace($link, "", $text);
+        return (trim($textContent));
     }
 
     /**
@@ -316,26 +315,27 @@ class PostContentController extends AbstractController
      *
      * @throws Exception If there is an error while retrieving or parsing the HTML content of the URL.
      */
-    public function extractInfoLink($link):array{
-        try{
+    public function extractInfoLink($link): array
+    {
+        try {
             $html = file_get_contents($link);
             $doc = new DOMDocument();
             @$doc->loadHTML($html);
             $title = $doc->getElementsByTagName('title')->item(0)->nodeValue;
             $parsedUrl = parse_url($link);
             $domain = $parsedUrl['host'];
-        }catch (\Exception|ValueError $e){
-            $domain="unknown";
-            $title="404 not found";
-            return([
-                "domain"=>trim($domain),
-                "title"=>trim($title),
+        } catch (\Exception|ValueError $e) {
+            $domain = "unknown";
+            $title = "404 not found";
+            return ([
+                "domain" => trim($domain),
+                "title" => trim($title),
             ]);
         }
 
-        return([
-            "domain"=>trim($domain),
-            "title"=>trim($title),
+        return ([
+            "domain" => trim($domain),
+            "title" => trim($title),
         ]);
     }
 }

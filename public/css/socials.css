@@ -1,36 +1,38 @@
 
-body{
-background-color: #EAE8E8;
+body {
+    background-color: #EAE8E8;
 }
 
-.wrapper--social{
+.wrapper--social {
     border-radius: 5px;
     height: 40rem;
-    width:50rem;
+    width: 50rem;
     margin-left: 29rem;
     margin-top: 8rem;
     background-color: #FFFFFF;
 }
 
-.wrapper--social .title{
+.wrapper--social .title {
     text-align: center;
-  padding-top: 2rem;
-    color:#7a7a7a;
+    padding-top: 2rem;
+    color: #7a7a7a;
     font-weight: lighter;
     font-size: 1.5em;
 }
-.wrapper--social .description{
+
+.wrapper--social .description {
     text-align: center;
-    color:#7a7a7a;
+    color: #7a7a7a;
 
 }
-.wrapper--social hr{
+
+.wrapper--social hr {
     width: 70%;
     margin-left: 15%;
-    color:#7a7a7a;
- }
+    color: #7a7a7a;
+}
 
-.social--media{
+.social--media {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -41,28 +43,31 @@ background-color: #EAE8E8;
     margin-left: 11rem;
 }
 
-.social--medium{
+.social--medium {
     margin-right: 4rem;
 }
 
-.socials--logo{
+.socials--logo {
     max-width: 4rem;
     max-height: 5rem;
     cursor: pointer;
 }
-.socials--logo.picture{
+
+.socials--logo.picture {
     border-radius: 50%;
-    scale:1.25;
+    scale: 1.25;
 }
-.socials--logo.picture:hover{
+
+.socials--logo.picture:hover {
     box-shadow: 0px 0px 8px 2px #86f1d2a6;
 }
 
-.header--socials{
+.header--socials {
     color: red;
     margin-bottom: -2rem;
 }
-.socials--logo.miniature{
+
+.socials--logo.miniature {
     height: 1rem;
     width: 1rem;
     position: absolute;
@@ -72,11 +77,12 @@ background-color: #EAE8E8;
     z-index: 4;
 }
 
-.socials--logo.picture.twitter{
+.socials--logo.picture.twitter {
     scale: 1.6;
     margin-top: 0.5rem
 }
-.confirm-reset{
+
+.confirm-reset {
     height: 6rem;
     width: 30rem;
     border: 1px solid transparent;
@@ -88,19 +94,21 @@ background-color: #EAE8E8;
     border-radius: 6px;
 
 }
-.confirm-button{
+
+.confirm-button {
     border: 1px solid transparent;
     width: 5rem;
     margin-right: 1rem;
 }
 
-.confirm-button.yes{
+.confirm-button.yes {
     cursor: auto;
 }
 
-a{
+a {
     color: red;
 }
-a:hover{
+
+a:hover {
     color: green;
 }

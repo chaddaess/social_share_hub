@@ -17,14 +17,17 @@ class FacebookLoginController extends AbstractController
             'clientId' => $_ENV['FCB_ID'],
             'clientSecret' => $_ENV['FCB_SECRET'],
             'redirectUri' => $_ENV['FCB_CALLBACK'],
-            'graphApiVersion' => 'v15.0',
+            'graphApiVersion' => 'v17.0',
         ]);
     }
 
     #[Route('/facebook/login', name: 'app_facebook_login')]
     public function index(): Response
     {
-        $helper_url = $this->provider->getAuthorizationUrl();
+        $options = [
+            'scope' => ['email', 'public_profile']
+        ];
+        $helper_url = $this->provider->getAuthorizationUrl($options);
         return $this->redirect($helper_url);
     }
 }

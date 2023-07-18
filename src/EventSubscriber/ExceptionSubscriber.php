@@ -18,7 +18,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
         $this->urlGenerator = $urlGenerator;
     }
 
-    public static function getSubscribedEvents():array
+    public static function getSubscribedEvents(): array
     {
         return [
             KernelEvents::EXCEPTION => 'onKernelException',

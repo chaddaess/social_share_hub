@@ -9,13 +9,13 @@
 {% block body %}
 
     <div class="wrapper--social">
-            {% for error in app.flashes('unauthorized_access') %}
-                {% if error is not empty %}
+        {% for error in app.flashes('unauthorized_access') %}
+            {% if error is not empty %}
                 <div class="error-message">
                     {{ error }}
                 </div>
-                {% endif %}
-            {% endfor %}
+            {% endif %}
+        {% endfor %}
         {% for error in app.flashes('connection_errors') %}
             {% if error is not empty %}
                 <div class="error-message">
@@ -37,71 +37,71 @@
         <div class="social--media">
             <div class="social--medium">
                 {% if picture is not empty %}
-                <a  id="facebook-pfp">
+                    <a id="facebook-pfp">
                         <img class="socials--logo picture" src="{{ picture }}"/>
                         <img class="socials--logo miniature" src='img/facebook.png.webp'/>
-                </a>
-                    {% else %}
-                <a href="{{ path('app_facebook_login') }}">
+                    </a>
+                {% else %}
+                    <a href="{{ path('app_facebook_login') }}">
                         <img class="socials--logo" src='img/facebook.png.webp'/>
-                </a>
-                    {% endif %}
+                    </a>
+                {% endif %}
             </div>
             <div class="social--medium">
                 {% if pictureLinkedin is not empty %}
-                <a href="#" id="linkedin-pfp">
-                <img class="socials--logo picture" src="{{ pictureLinkedin }}"/>
-                </a>
+                    <a href="#" id="linkedin-pfp">
+                        <img class="socials--logo picture" src="{{ pictureLinkedin }}"/>
+                    </a>
 
                     <img class="socials--logo miniature" src="img/linkedin.png.webp"/>
-                    {% else %}
-                <a href="{{ path('app_linkedin_login') }}">
+                {% else %}
+                    <a href="{{ path('app_linkedin_login') }}">
                         <img class="socials--logo" src="img/linkedin.png.webp"/>
-                </a>
-                    {% endif %}
+                    </a>
+                {% endif %}
 
             </div>
             <div class="social--medium">
 
-            {% if pictureTwitter is not empty %}
-                <a href="#" id="twitter-pfp">
+                {% if pictureTwitter is not empty %}
+                    <a href="#" id="twitter-pfp">
                         <img
                                 class="socials--logo picture twitter"
                                 src="{{ pictureTwitter }}"
                         />
-                </a href="#">
-                        <img
-                                class="socials--logo miniature"
-                                src="img/twitter.png.webp"
-                        />
-                    {% else %}
-                <a href="{{ path('app_twitter_login') }}">
+                    </a href="#">
+                    <img
+                            class="socials--logo miniature"
+                            src="img/twitter.png.webp"
+                    />
+                {% else %}
+                    <a href="{{ path('app_twitter_login') }}">
                         <img
                                 class="socials--logo"
                                 src="img/twitter.png.webp"
                         />
-                </a>
-                    {% endif %}
+                    </a>
+                {% endif %}
 
 
             </div>
         </div>
         <div class="confirm-reset" id="fb">
             <p>Are you sure you want to disconnect from Facebook ?</p>
-            <button class="confirm-button  yes"><a href="{{  path('app_reset_socials_facebook') }}">yes</a></button>
+            <button class="confirm-button  yes"><a href="{{ path('app_reset_socials_facebook') }}">yes</a></button>
             <button id="fb-button" class="confirm-button">no</button>
         </div>
         <div class="confirm-reset" id="tw">
             <p>Are you sure you want to disconnect from Twitter ?</p>
-            <button class="confirm-button yes"><a href="{{  path('app_reset_socials_twitter') }}">yes</a></button>
-            <button class="confirm-button"id="tw-button" >no</button>
+            <button class="confirm-button yes"><a href="{{ path('app_reset_socials_twitter') }}">yes</a></button>
+            <button class="confirm-button" id="tw-button">no</button>
         </div>
         <div class="confirm-reset" id="link">
             <p>Are you sure you want to disconnect from Linkedin ?</p>
-            <button class="confirm-button yes"><a href="{{  path('app_reset_socials_linkedin') }}">yes</a></button>
+            <button class="confirm-button yes"><a href="{{ path('app_reset_socials_linkedin') }}">yes</a></button>
             <button id="link-button" class="confirm-button">no</button>
         </div>
     </div>
     <script src="js/social-media.js"></script>
 
-{% endblock%}
+{% endblock %}

@@ -7,10 +7,11 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class LoginTest extends WebTestCase
 {
-    public function  testUserShouldLogin(){
-        $client=static::createClient();
-        $crawler=$client->request('GET','/login');
-        $form=$crawler->selectButton('sign in')->form([
+    public function testUserShouldLogin()
+    {
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/login');
+        $form = $crawler->selectButton('sign in')->form([
             'email' => 'dummyUser1@gmail.com',
             'password' => '1234',
         ]);
@@ -21,11 +22,12 @@ class LoginTest extends WebTestCase
 
     }
 
-    public function  testUserShouldNOTLoginWrongPassword(){
+    public function testUserShouldNOTLoginWrongPassword()
+    {
         //user should not be allowed to login because of an incorrect password
-        $client=static::createClient();
-        $crawler=$client->request('GET','/login');
-        $form=$crawler->selectButton('sign in')->form([
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/login');
+        $form = $crawler->selectButton('sign in')->form([
             'email' => 'dummyUser1@gmail.com',
             'password' => '123456',
         ]);
@@ -36,11 +38,12 @@ class LoginTest extends WebTestCase
 
     }
 
-    public function  testUserShouldNOTLoginWrongEmail(){
+    public function testUserShouldNOTLoginWrongEmail()
+    {
         //user should not be allowed to login because of an incorrect email
-        $client=static::createClient();
-        $crawler=$client->request('GET','/login');
-        $form=$crawler->selectButton('sign in')->form([
+        $client = static::createClient();
+        $crawler = $client->request('GET', '/login');
+        $form = $crawler->selectButton('sign in')->form([
             'email' => 'inexistantemail@gmail.com',
             'password' => '123456',
         ]);

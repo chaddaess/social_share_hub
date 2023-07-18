@@ -4,7 +4,7 @@ namespace App\Tests\Integration;
 
 class ExtractedCodeApiCalls
 {
-    public function makeCalls($socialsArray,$text,$access_token_link,$userID,$access_token_tw):bool
+    public function makeCalls($socialsArray, $text, $access_token_link, $userID, $access_token_tw): bool
     {
         $test = true;
         $mh = curl_multi_init();

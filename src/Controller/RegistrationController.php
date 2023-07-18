@@ -21,9 +21,9 @@ class RegistrationController extends AbstractController
     #[Route('/register', name: 'app_register')]
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
-        $session=$request->getSession();
-        if($session->get('user_email')){
-            return($this->redirectToRoute('app_social_media'));
+        $session = $request->getSession();
+        if ($session->get('user_email')) {
+            return ($this->redirectToRoute('app_social_media'));
         }
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);

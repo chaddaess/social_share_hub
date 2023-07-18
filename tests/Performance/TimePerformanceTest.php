@@ -91,6 +91,7 @@ class TimePerformanceTest extends WebTestCase
         }
 
     }
+
     public function testFacebookLoginRedirectTimeUnder500()
     {
         $client = static::createClient();

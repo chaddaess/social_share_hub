@@ -35,11 +35,9 @@ class FacebookCallbackController extends AbstractController
             $token = $this->provider->getAccessToken('authorization_code', [
                 'code' => $_GET['code']
             ]);
-
-        }catch (ErrorException|\BadMethodCallException $e){
+        } catch (ErrorException|\BadMethodCallException $e) {
             return ($this->redirectToRoute('app_social_media'));
-        }
-        catch (IdentityProviderException $e) {
+        } catch (IdentityProviderException $e) {
             return ($this->redirectToRoute('app_social_media', [
                 'facebook_connect_error' => "⨂ Could not connect to facebook,please try again later"
             ]));
@@ -60,17 +58,16 @@ class FacebookCallbackController extends AbstractController
             $manager->persist($user_connected);
             $manager->flush();
             //set the session
-            $facebookSession=[
-                'user'=>$user,
-                'picture'=>$userPicture,
-                'token'=>$token,
+            $facebookSession = [
+                'user' => $user,
+                'picture' => $userPicture,
+                'token' => $token,
             ];
-            $session->set('facebook_session',$facebookSession);
+            $session->set('facebook_session', $facebookSession);
             return ($this->redirectToRoute('app_social_media'));
-        }catch(\ErrorException){
+        } catch (\ErrorException) {
             return ($this->redirectToRoute('app_social_media'));
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             return ($this->redirectToRoute('app_social_media', [
                 'facebook_connect_error' => "⨂ Could not connect to facebook,please try again later"
             ]));

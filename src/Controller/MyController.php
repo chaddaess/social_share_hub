@@ -12,7 +12,7 @@ class MyController extends AbstractController
     #[Route('/my', name: 'app_my')]
     public function index(Request $request): Response
     {
-        $sess=$request->getSession();
+        $sess = $request->getSession();
         dd($sess->get('twitter_session'));
         return $this->render('test/index.html.twig');
     }

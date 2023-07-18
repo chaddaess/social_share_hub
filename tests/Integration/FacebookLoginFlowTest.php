@@ -26,33 +26,36 @@ class FacebookLoginFlowTest extends WebTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->callbackController=new FacebookCallbackController();
-        $this->loginController=new FacebookLoginController();
-        $this->authorizationUrl='';
+        $this->callbackController = new FacebookCallbackController();
+        $this->loginController = new FacebookLoginController();
+        $this->authorizationUrl = '';
 
 
     }
+
     /**
      *  checks if connecting to facebook account is correctly authorized
-    */
-    public function testAuthorizationShouldWork(){
+     */
+    public function testAuthorizationShouldWork()
+    {
         self::bootKernel();
-        $container =  self::$kernel->getContainer();
+        $container = self::$kernel->getContainer();
         $manager = $container->get('doctrine.orm.entity_manager');
         $repository = $manager->getRepository(User::class);
-        $response=$this->loginController->index();
+        $response = $this->loginController->index();
         $this->assertInstanceOf(RedirectResponse::class, $response);
         $this->assertStringStartsWith('https://www.facebook.com/v15.0/dialog/oauth', $response->getTargetUrl());
     }
 
     /**
      * checks if authentication with facebook is successful
-    */
-    public function testAuthenticationShouldWork(){
+     */
+    public function testAuthenticationShouldWork()
+    {
         $client = static::createClient();
         self::bootKernel();
         $container = self::$kernel->getContainer();
-        $manager=$container->get('doctrine.orm.entity_manager');
+        $manager = $container->get('doctrine.orm.entity_manager');
         $repository = $manager->getRepository(User::class);
         //get the authorization code
         //set dummy user
@@ -70,11 +73,10 @@ class FacebookLoginFlowTest extends WebTestCase
         $response = $this->callbackController->index($repository, $manager, $request);
         //test output
         $this->assertInstanceOf(RedirectResponse::class, $response);
-        $this->assertEquals('/socialmedia',$response->getTargetUrl());
+        $this->assertEquals('/socialmedia', $response->getTargetUrl());
         $user = $repository->findOneBy(['email' => 'test@example.com']);
         $manager->remove($user);
         $manager->flush();
-
 
 
     }

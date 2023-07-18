@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Tests\Integration;
+
 use App\Controller\ResetSocialsController;
 use App\Entity\User;
 use App\Repository\UserRepository;
@@ -18,10 +19,11 @@ class ResetSocialsTest extends WebTestCase
 
     private ResetSocialsController $resetSocialsController;
     private User $user;
+
     public function setUp(): void
     {
         parent::setUp();
-        $this->resetSocialsController=new ResetSocialsController();
+        $this->resetSocialsController = new ResetSocialsController();
         $this->user = new User();
         $this->user->setEmail('test@example.com');
         $this->user->setFacebookId('12345');
@@ -38,10 +40,11 @@ class ResetSocialsTest extends WebTestCase
     /**
      * @throws Exception
      */
-    public function testFacebookSocialShouldBeReset(){
+    public function testFacebookSocialShouldBeReset()
+    {
         //setting the service for our test controller
         self::bootKernel();
-        $container =  self::$kernel->getContainer();
+        $container = self::$kernel->getContainer();
         $manager = $container->get('doctrine.orm.entity_manager');
         $repository = $manager->getRepository(User::class);
         $manager->persist($this->user);
@@ -67,10 +70,11 @@ class ResetSocialsTest extends WebTestCase
 
     }
 
-    public function testLinkedinSocialShouldBeReset(){
+    public function testLinkedinSocialShouldBeReset()
+    {
         //setting the service for our test controller
         self::bootKernel();
-        $container =  self::$kernel->getContainer();
+        $container = self::$kernel->getContainer();
         $manager = $container->get('doctrine.orm.entity_manager');
         $repository = $manager->getRepository(User::class);
         $manager->persist($this->user);
@@ -98,10 +102,11 @@ class ResetSocialsTest extends WebTestCase
     }
 
 
-    public function testTwitterSocialShouldBeReset(){
+    public function testTwitterSocialShouldBeReset()
+    {
         //setting the service for our test controller
         self::bootKernel();
-        $container =  self::$kernel->getContainer();
+        $container = self::$kernel->getContainer();
         $manager = $container->get('doctrine.orm.entity_manager');
         $repository = $manager->getRepository(User::class);
         $manager->persist($this->user);

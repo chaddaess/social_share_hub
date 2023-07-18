@@ -13,50 +13,49 @@ use Symfony\Component\Security\Core\Security;
 class SocialMediaController extends AbstractController
 {
     #[Route('/socialmedia', name: 'app_social_media')]
-    public function index(Request $request ,UserRepository $userDb): Response
+    public function index(Request $request, UserRepository $userDb): Response
     {
-        $session=$request->getSession();
+        $session = $request->getSession();
         //redirecting with errors or exceptions
-        $postError=$request->get('error_message');
-        $this->addFlash('unauthorized_access',$postError);
-        $this->addFlash('success',$request->get('success-posting'));
-        $facebookConnectError=$request->get('facebook_connect_error');
-        $linkedinConnectError=$request->get('linkedin_connect_error');
-        $twitterConnectError=$request->get('twitter_connect_error');
-        $this->addFlash('connection_errors',$facebookConnectError);
-        $this->addFlash('connection_errors',$linkedinConnectError);
-        $this->addFlash('connection_errors',$twitterConnectError);
+        $postError = $request->get('error_message');
+        $this->addFlash('unauthorized_access', $postError);
+        $this->addFlash('success', $request->get('success-posting'));
+        $facebookConnectError = $request->get('facebook_connect_error');
+        $linkedinConnectError = $request->get('linkedin_connect_error');
+        $twitterConnectError = $request->get('twitter_connect_error');
+        $this->addFlash('connection_errors', $facebookConnectError);
+        $this->addFlash('connection_errors', $linkedinConnectError);
+        $this->addFlash('connection_errors', $twitterConnectError);
         if (!$session->get('user_email')) {
             return ($this->redirectToRoute('app_login'));
 
         }
         $currentTimestamp = (new \DateTime())->getTimestamp();
-        if(!$session->get('checked')){
+        if (!$session->get('checked')) {
             //first time accessing the route
             $user_connected = $userDb->findOneBy(['email' => $session->get('user_email')]);
-            $facebook_valid=$user_connected->getFacebookExpirationTime()>=$currentTimestamp; //TRUE of token is valid
-            $twitter_valid=$user_connected->getTwitterExpirationTime()>=$currentTimestamp;
-            $linkedin_valid=$user_connected->getLinkedinExpirationTime()>=$currentTimestamp;
-            $facebookPicture=$facebook_valid?$user_connected->getFacebookPicture():'';
-            $twitterPicture=$twitter_valid?$user_connected->getTwitterPicture():'';
-            $linkedinPicture=$linkedin_valid?$user_connected->getLinkedinPicture():'';
-            $fb=$session->get('facebook_session');
-            $fb['picture']=$facebookPicture;
-            $session->set('facebook_session',$fb);
-            $tw=$session->get('twitter_session');
-            $tw['picture']=$twitterPicture;
-            $session->set('twitter_session',$tw);
-            $link=$session->get('linkedin_session');
-            $link['picture']=$linkedinPicture;
-            $session->set('linkedin_session',$link);
-            $session->set('checked',true);
+            $facebook_valid = $user_connected->getFacebookExpirationTime() >= $currentTimestamp; //TRUE of token is valid
+            $twitter_valid = $user_connected->getTwitterExpirationTime() >= $currentTimestamp;
+            $linkedin_valid = $user_connected->getLinkedinExpirationTime() >= $currentTimestamp;
+            $facebookPicture = $facebook_valid ? $user_connected->getFacebookPicture() : '';
+            $twitterPicture = $twitter_valid ? $user_connected->getTwitterPicture() : '';
+            $linkedinPicture = $linkedin_valid ? $user_connected->getLinkedinPicture() : '';
+            $fb = $session->get('facebook_session');
+            $fb['picture'] = $facebookPicture;
+            $session->set('facebook_session', $fb);
+            $tw = $session->get('twitter_session');
+            $tw['picture'] = $twitterPicture;
+            $session->set('twitter_session', $tw);
+            $link = $session->get('linkedin_session');
+            $link['picture'] = $linkedinPicture;
+            $session->set('linkedin_session', $link);
+            $session->set('checked', true);
 
-        }
-        else{
+        } else {
             //accessing the route another time
-            $facebookPicture =$session->get('facebook_session')['picture'];
-            $twitterPicture =$session->get('twitter_session')['picture'];
-            $linkedinPicture=$session->get('linkedin_session')['picture'];
+            $facebookPicture = $session->get('facebook_session')['picture'];
+            $twitterPicture = $session->get('twitter_session')['picture'];
+            $linkedinPicture = $session->get('linkedin_session')['picture'];
 
         }
         return $this->render('social_media/index.html.twig', [

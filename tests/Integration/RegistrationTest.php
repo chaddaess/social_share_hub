@@ -1,9 +1,12 @@
 <?php
+
 namespace App\Tests\Integration;
+
 use App\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Response;
 use App\Repository\UserRepository;
+
 class RegistrationTest extends WebTestCase
 {
     public function testUserShouldBeRegistered()
@@ -12,9 +15,9 @@ class RegistrationTest extends WebTestCase
         // Submit the registration form with valid data
         $crawler = $client->request('GET', '/register');
         $form = $crawler->selectButton('sign up')->form([
-        'registration_form[email]' => 'test@test.com',
-        'registration_form[plainPassword]' => 'password123',
-        'registration_form[agreeTerms]' => true
+            'registration_form[email]' => 'test@test.com',
+            'registration_form[plainPassword]' => 'password123',
+            'registration_form[agreeTerms]' => true
         ]);
         $client->submit($form);
         // Check that the response is a redirect to the login page
@@ -29,6 +32,7 @@ class RegistrationTest extends WebTestCase
         $entityManager->remove($user);
         $entityManager->flush();
     }
+
     public function testUserShouldNOTBeRegisteredTerms()
     {
         //user should NOT be registered if they don't accept terms
@@ -51,6 +55,7 @@ class RegistrationTest extends WebTestCase
         ]);
         $this->assertNull($user);
     }
+
     public function testUserShouldNOTBeRegisteredPassword()
     {
         //user should NOT be registered if the password is less than 6 characters

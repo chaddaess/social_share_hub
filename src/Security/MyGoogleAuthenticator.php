@@ -28,12 +28,12 @@ class MyGoogleAuthenticator extends OAuth2Authenticator implements Authenticatio
     private $urlGenerator;
 
 
-    public function __construct(ClientRegistry $clientRegistry, EntityManagerInterface $entityManager, RouterInterface $router,UrlGeneratorInterface $urlGenerator)
+    public function __construct(ClientRegistry $clientRegistry, EntityManagerInterface $entityManager, RouterInterface $router, UrlGeneratorInterface $urlGenerator)
     {
         $this->clientRegistry = $clientRegistry;
         $this->entityManager = $entityManager;
         $this->router = $router;
-        $this->urlGenerator=$urlGenerator;
+        $this->urlGenerator = $urlGenerator;
     }
 
     public function supports(Request $request): ?bool
@@ -80,13 +80,13 @@ class MyGoogleAuthenticator extends OAuth2Authenticator implements Authenticatio
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
     {
         $targetUrl = $this->router->generate('app_social_media');
-        $request->getSession()->set('checked',false);
+        $request->getSession()->set('checked', false);
         return new RedirectResponse($targetUrl);
     }
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): ?Response
     {
-        $redirectUrl=$this->urlGenerator->generate('app_login');
+        $redirectUrl = $this->urlGenerator->generate('app_login');
         return new RedirectResponse($redirectUrl);
     }
 

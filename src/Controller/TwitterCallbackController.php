@@ -40,7 +40,7 @@ class TwitterCallbackController extends AbstractController
             return ($this->redirectToRoute('app_social_media', [
                 'twitter_connect_error' => "⨂ Could not connect to twitter,please try again later"
             ]));
-        }catch(ErrorException|\BadMethodCallException $e){
+        } catch (ErrorException|\BadMethodCallException $e) {
             return ($this->redirectToRoute('app_social_media'));
         }
         //use the token
@@ -59,19 +59,18 @@ class TwitterCallbackController extends AbstractController
             $manager->persist($user_connected);
             $manager->flush();
             //set the session
-            $twitterSession=[
-                'user'=>$user,
-                'picture'=>$userPicture,
-                'token'=>$token,
+            $twitterSession = [
+                'user' => $user,
+                'picture' => $userPicture,
+                'token' => $token,
             ];
-            $session->set('twitter_session',$twitterSession);
+            $session->set('twitter_session', $twitterSession);
             return ($this->redirectToRoute('app_social_media'));
         } catch (\Exception $e) {
             return ($this->redirectToRoute('app_social_media', [
                 'twitter_connect_error' => "⨂ Could not connect to twitter,please try again later"
             ]));
         }
-
 
 
     }

@@ -13,18 +13,18 @@ class SecurityController extends AbstractController
     #[Route(path: '/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils, Request $request): Response
     {
-        $session=$request->getSession();
-        if($session->get('user_email')){
-            return($this->redirectToRoute('app_social_media'));
+        $session = $request->getSession();
+        if ($session->get('user_email')) {
+            return ($this->redirectToRoute('app_social_media'));
         }
 
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
-        $postErrorMessage=$request->get('error_message');
-        $this->addFlash('unauthorized_access',$postErrorMessage);
-        $request->getSession()->set('checked',false);
+        $postErrorMessage = $request->get('error_message');
+        $this->addFlash('unauthorized_access', $postErrorMessage);
+        $request->getSession()->set('checked', false);
         return $this->render('security/login.html.twig',
             [
                 'last_username' => $lastUsername,

@@ -2,17 +2,17 @@
 
 {% block title %}Archive{% endblock %}
 {% block stylesheets %}
-<link rel="stylesheet" href="css/post-archive.css"/>
-{% endblock  %}
+    <link rel="stylesheet" href="css/post-archive.css"/>
+{% endblock %}
 {% block body %}
-<div class="posts">
-    {%if posts is empty %}
-        <div class="empty">
-            No posts yet,
-            <a href="{{ path('app_post_content') }}">start by posting something amazing</a>
-        </div>
-    {% endif %}
-    {% for post in posts %}
+    <div class="posts">
+        {% if posts is empty %}
+            <div class="empty">
+                No posts yet,
+                <a href="{{ path('app_post_content') }}">start by posting something amazing</a>
+            </div>
+        {% endif %}
+        {% for post in posts %}
             <div class="post-box">
                 <p class="title">Post:</p>
                 <div class="post--body">
@@ -22,7 +22,7 @@
                     <a href="{{ post.link }}">
                         <div class="link">
                             {% if post.domain=="www.jawharafm.net" %}
-                            <img src="{{ "https://www.jawharafm.net"~post.image }}" class="article--image"/>
+                                <img src="{{ "https://www.jawharafm.net"~post.image }}" class="article--image"/>
                             {% else %}
                                 <img src="{{ post.image }}" class="article--image"/>
                             {% endif %}
@@ -37,14 +37,14 @@
                 <hr>
                 <p class="title">Social platforms:</p>
                 <div class="socials">
-                    {%for media in post.postedOn %}
-                        {% set path='img/'~media~'.png.webp'%}
-                        <img src="{{ path }}" class="social--media--archive" />
+                    {% for media in post.postedOn %}
+                        {% set path='img/'~media~'.png.webp' %}
+                        <img src="{{ path }}" class="social--media--archive"/>
                     {% endfor %}
                 </div>
                 <span>Posted at {{ post.postTime|date('m/d/Y H:i:s') }}</span>
                 <br>
             </div>
-    {% endfor %}
-</div>
+        {% endfor %}
+    </div>
 {% endblock %}

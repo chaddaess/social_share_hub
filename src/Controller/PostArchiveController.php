@@ -16,17 +16,16 @@ use Symfony\Component\Routing\Annotation\Route;
 class PostArchiveController extends AbstractController
 {
     #[Route('/archive', name: 'app_post_archive')]
-    public function index(ManagerRegistry $doctrine,PostRepository $postRepository,Request $request,UserRepository $userRepository): Response
+    public function index(ManagerRegistry $doctrine, PostRepository $postRepository, Request $request, UserRepository $userRepository): Response
     {
-        $session=$request->getSession();
-        if(!$session->has('user_email'))
-        {
+        $session = $request->getSession();
+        if (!$session->has('user_email')) {
             return ($this->redirectToRoute('app_login'));
         }
-        $current_user=$userRepository->findOneBy(['email'=>$session->get('user_email')]);
-        $posts=$postRepository->findBy(['user'=>$current_user]);
+        $current_user = $userRepository->findOneBy(['email' => $session->get('user_email')]);
+        $posts = $postRepository->findBy(['user' => $current_user]);
         return $this->render('post_archive/index.html.twig', [
-            'posts'=>$posts
+            'posts' => $posts
         ]);
     }
 

@@ -18,9 +18,9 @@ class ApiCallTest extends TestCase
     private ExtractedCodeApiCalls $testObject;
     private array $socialsArray;
     private string $text;
-    private String $access_token_tw;
-    private String $access_token_link;
-    private String $userId;
+    private string $access_token_tw;
+    private string $access_token_link;
+    private string $userId;
 
     /**
      * @throws Exception
@@ -28,12 +28,12 @@ class ApiCallTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->testObject=new ExtractedCodeApiCalls();
-        $this->socialsArray=['linkedin','twitter'];
-        $this->text="hi , this is a test";
-        $this->access_token_tw="111";
-        $this->access_token_link="111";
-        $this->userId="cRe5O_7NnT";
+        $this->testObject = new ExtractedCodeApiCalls();
+        $this->socialsArray = ['linkedin', 'twitter'];
+        $this->text = "hi , this is a test";
+        $this->access_token_tw = "111";
+        $this->access_token_link = "111";
+        $this->userId = "cRe5O_7NnT";
     }
 
     /**
@@ -42,13 +42,14 @@ class ApiCallTest extends TestCase
 
     //⚠️this test  method will ACTUALLY make the API CALL
     //when provided with correct data
-    public function testMakeCallWithWrongTokens(){
-        $text=$this->text;
-        $socialsArray=$this->socialsArray;
-        $userID=$this->userId;
-        $access_token_tw=$this->access_token_tw;
-        $access_token_link=$this->access_token_link;
-        $result=$this->testObject->makeCalls($socialsArray,$text,$access_token_link,$userID,$access_token_tw);
+    public function testMakeCallWithWrongTokens()
+    {
+        $text = $this->text;
+        $socialsArray = $this->socialsArray;
+        $userID = $this->userId;
+        $access_token_tw = $this->access_token_tw;
+        $access_token_link = $this->access_token_link;
+        $result = $this->testObject->makeCalls($socialsArray, $text, $access_token_link, $userID, $access_token_tw);
         $this->assertEquals(true, $result);
     }
 

@@ -1,6 +1,6 @@
-.posts{
-    width:85rem;
-    height:100%;
+.posts {
+    width: 85rem;
+    height: 100%;
     margin-left: 3rem;
     margin-top: 3rem;
     display: flex;
@@ -8,47 +8,52 @@
     align-items: center;
 }
 
-.post-box{
-    border:1px solid transparent;
+.post-box {
+    border: 1px solid transparent;
     width: 90%;
     height: auto;
     background-color: white;
     margin-top: 3rem;
 }
 
-.socials{
+.socials {
     display: flex;
     flex-direction: row;
     margin-top: -1rem;
     align-items: center;
 }
 
-.social--media--archive{
+.social--media--archive {
     width: 2rem;
     height: 2rem;
     margin-right: 3rem;
     margin-top: 1rem;
 }
-.social--media--archive:first-of-type{
+
+.social--media--archive:first-of-type {
     margin-left: 7rem;
 }
-span{
+
+span {
     color: #7a7a7a;
     font-size: small;
     margin-left: 7rem;
 }
-hr{
+
+hr {
     width: 12rem;
-    margin-left:7rem;
+    margin-left: 7rem;
 }
-.title{
+
+.title {
     color: #0a53be;
     margin-left: 7rem;
 }
-.post--body{
-    width:auto;
+
+.post--body {
+    width: auto;
     height: auto;
-    border:1px solid transparent;
+    border: 1px solid transparent;
     background-color: whitesmoke;
     margin-left: 7rem;
     white-space: normal;
@@ -56,19 +61,19 @@ hr{
 
 }
 
-.empty{
-    width:auto;
+.empty {
+    width: auto;
     height: 10rem;
-    border:1px solid transparent;
+    border: 1px solid transparent;
     background-color: whitesmoke;
-    margin-left:10rem;
-    margin-top:20rem;
-    display:flex;
+    margin-left: 10rem;
+    margin-top: 20rem;
+    display: flex;
     align-items: center;
     padding: 1rem;
 }
 
-.link{
+.link {
     width: 90%;
     border: 1px solid black;
     border-radius: 6px;
@@ -78,22 +83,27 @@ hr{
     display: flex;
     flex-direction: row;
 }
-.link--title{
+
+.link--title {
     text-align: right;
 }
-.domain{
+
+.domain {
     font-size: 10px;
     color: grey;
     text-align: right;
 
 }
-.info{
+
+.info {
     margin-left: 45%;
 }
-.link--title{
+
+.link--title {
     font-size: 1.25em;
 }
-.article--image{
+
+.article--image {
     max-width: 15rem;
     height: 12rem;
     border-radius: 12px;

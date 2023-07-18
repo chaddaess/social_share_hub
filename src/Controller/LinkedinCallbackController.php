@@ -34,7 +34,6 @@ class LinkedinCallbackController extends AbstractController
                 'code' => $_GET['code']
             ]);
             //get user's complete info
-
             $user = $this->provider->getResourceOwner($accessToken);
             $email = $user->getEmail();//this is returning null for some reason
             //to get the user's picture
@@ -64,18 +63,17 @@ class LinkedinCallbackController extends AbstractController
             $manager->persist($user_connected);
             $manager->flush();
             //set the session
-            $linkedin_session=[
-                'user'=>$user,
-                'picture'=>$profilePictureUrl,
-                'token'=>$accessToken,
+            $linkedin_session = [
+                'user' => $user,
+                'picture' => $profilePictureUrl,
+                'token' => $accessToken,
 
             ];
-            $session->set('linkedin_session',$linkedin_session);
+            $session->set('linkedin_session', $linkedin_session);
             return ($this->redirectToRoute('app_social_media'));
-        } catch(\ErrorException){
+        } catch (\ErrorException) {
             return ($this->redirectToRoute('app_social_media'));
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             return ($this->redirectToRoute('app_social_media', [
                 'linkedin_connect_error' => "⨂ Could not connect to linkedin,please try again later"
             ]));

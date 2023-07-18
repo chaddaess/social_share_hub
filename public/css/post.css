@@ -1,18 +1,20 @@
-body{
+body {
     display: flex;
     justify-content: center;
     align-items: center;
 }
-.form{
+
+.form {
     border: 1px solid transparent;
     height: auto;
     width: 50rem;
-    margin-top:2rem;
+    margin-top: 2rem;
     border-radius: 12px;
     background-color: white;
     padding-top: 1rem;
 }
-.textArea{
+
+.textArea {
     width: 49.9rem;
     height: 20rem;
     text-align: justify;
@@ -22,14 +24,16 @@ body{
     /*text-indent: 2rem;*/
     resize: none;
 }
-.textArea:active{
+
+.textArea:active {
     border-color: transparent;
 }
-.textArea:focus{
+
+.textArea:focus {
     outline: none;
 }
 
-.submit-button{
+.submit-button {
     margin-top: 4rem;
     margin-bottom: 1rem;
     margin-left: 75%;
@@ -40,22 +44,22 @@ body{
     color: white;
 }
 
-.submit-button:hover{
+.submit-button:hover {
     background-color: whitesmoke;
     color: black;
 
 }
 
-.form-choice-pictures{
+.form-choice-pictures {
     width: 3rem;
     height: 3rem;
     border-radius: 50%;
-    scale:2;
+    scale: 2;
 
 }
 
-label{
-    opacity:0.5;
+label {
+    opacity: 0.5;
     margin-right: 7rem;
 }
 
@@ -63,7 +67,8 @@ input[type="checkbox"] {
     display: none;
 
 }
-.checkbox-element{
+
+.checkbox-element {
     margin-left: 10rem;
 }
 
@@ -72,13 +77,16 @@ input[type="checkbox"] + label {
     margin-top: 2rem;
 
 }
-label:hover{
+
+label:hover {
     box-shadow: 0px 0px 1px rgba(11, 16, 16, 0.68);
 }
-input[type="checkbox"]:checked +label {
-    opacity:1;
+
+input[type="checkbox"]:checked + label {
+    opacity: 1;
 }
-hr{
+
+hr {
     width: 90%;
     margin-left: 5%;
 }
@@ -86,15 +94,17 @@ hr{
 input[type="checkbox"] + label:first-of-type {
     margin-left: 12rem;
 }
-#checkbox--header{
+
+#checkbox--header {
     margin-left: 2.1rem;
     margin-top: 2rem;
 }
-label:first-of-type{
+
+label:first-of-type {
     margin-left: 45rem;
 }
 
-.social--media--miniature{
+.social--media--miniature {
     height: 1.5rem;
     width: 1.5rem;
     position: absolute;
@@ -102,11 +112,13 @@ label:first-of-type{
     margin-top: 5rem;
     z-index: 4;
 }
-.form-error{
+
+.form-error {
     color: darkred;
     font-size: 14px;
 
 }
-.form-error ul{
+
+.form-error ul {
     list-style: none;
 }

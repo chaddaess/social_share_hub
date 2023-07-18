@@ -12,22 +12,23 @@ use Symfony\Component\Routing\Annotation\Route;
 class ResetSocialsController extends AbstractController
 {
     #[Route('/reset-socials/facebook', name: 'app_reset_socials_facebook')]
-    public function resetFacebook(UserRepository $repository,EntityManagerInterface $manager,Request $request): Response
+    public function resetFacebook(UserRepository $repository, EntityManagerInterface $manager, Request $request): Response
     {
-        $session=$request->getSession();
+        $session = $request->getSession();
         $user_connected = $repository->findOneBy(['email' => $session->get('user_email')]);
         $user_connected->setFacebookId(null);
         $user_connected->setFacebookPicture('');
         $user_connected->setFacebookExpirationTime(null);
         $manager->persist($user_connected);
         $manager->flush();
-        $session->set('facebook_session',['picture'=>'']);
+        $session->set('facebook_session', ['picture' => '']);
         return ($this->redirectToRoute('app_social_media'));
     }
+
     #[Route('/reset-socials/linkedin', name: 'app_reset_socials_linkedin')]
-    public function resetLinkedin(UserRepository $repository,EntityManagerInterface $manager,Request $request): Response
+    public function resetLinkedin(UserRepository $repository, EntityManagerInterface $manager, Request $request): Response
     {
-        $session=$request->getSession();
+        $session = $request->getSession();
         $user_connected = $repository->findOneBy(['email' => $session->get('user_email')]);
         $user_connected->setLinkedinId(null);
         $user_connected->setLinkedinPicture('');
@@ -35,13 +36,14 @@ class ResetSocialsController extends AbstractController
         $user_connected->setLinkedinToken(null);
         $manager->persist($user_connected);
         $manager->flush();
-        $session->set('linkedin_session',['picture'=>'']);
+        $session->set('linkedin_session', ['picture' => '']);
         return ($this->redirectToRoute('app_social_media'));
     }
+
     #[Route('/reset-socials/twitter', name: 'app_reset_socials_twitter')]
-    public function resetTwitter(UserRepository $repository,EntityManagerInterface $manager,Request $request): Response
+    public function resetTwitter(UserRepository $repository, EntityManagerInterface $manager, Request $request): Response
     {
-        $session=$request->getSession();
+        $session = $request->getSession();
         $user_connected = $repository->findOneBy(['email' => $session->get('user_email')]);
         $user_connected->setTwitterId(null);
         $user_connected->setTwitterPicture('');
@@ -49,7 +51,7 @@ class ResetSocialsController extends AbstractController
         $user_connected->setTwitterToken(null);
         $manager->persist($user_connected);
         $manager->flush();
-        $session->set('twitter_session',['picture'=>'']);
+        $session->set('twitter_session', ['picture' => '']);
         return ($this->redirectToRoute('app_social_media'));
     }
 }
