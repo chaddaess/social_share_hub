@@ -1,0 +1,55 @@
+{% extends 'templates.html.twig' %}
+
+{% block title %}Post{% endblock %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="css/post.css"/>
+
+{% endblock %}
+{% block javascripts %}
+{% endblock %}
+
+{% block body %}
+
+    {% set i=0 %}
+    <div class="form">
+        {% for error in app.flashes('missing_link') %}
+            {% if error is not empty %}
+                <div class="error-message">
+                    {{ error }}
+                </div>
+            {% endif %}
+        {% endfor %}
+
+        {% for error in app.flashes('curl_error') %}
+            {% if error is not empty %}
+                <div class="error-message">
+                    {{ error }}
+                </div>
+            {% endif %}
+        {% endfor %}
+        {{ form_start(form) }}
+        {{ form_row(form.textContent,{'attr':{'class':'textArea'}}) }}
+
+        {#        {{ form_widget(form.image, {'attr': {'style': 'display:none'}}) }} #}
+        {#        <div class="form-error">{{ form_errors(form.image,{'attr': {'class':'upload-errors'}}) }}</div> #}
+        {#        <label for="{{ form.image.vars.id }}" class="custom-file-upload"> #}
+        {#            <i class="fa-solid fa-image fa-2x" class="image-upload"></i> #}
+        {#        </label> #}
+
+
+        <hr>
+        <p id="checkbox--header">Share your post on</p>
+        <div class="socials--checkbox">
+            {% for child in form.postedOn %}
+                {% set imagePath = 'img/' ~ options[i] ~ '.png.webp' %}
+                {{ form_widget(child,{'attr':{'class':'checkbox-element'}}) }}
+                <label for="{{ child.vars.id }}">{{ child.vars.label|raw }}</label>
+                <img src="{{ imagePath }}" class="social--media--miniature">
+                {% set i = i + 1 %}
+            {% endfor %}
+        </div>
+        {{ form_row(form.post,{'attr':{'class':'submit-button'}}) }}
+        {{ form_end(form) }}
+
+    </div>
+{% endblock %}
