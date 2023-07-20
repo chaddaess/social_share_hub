@@ -30,7 +30,7 @@ class TwitterCallbackController extends AbstractController
     #[Route('/twitter-callback', name: 'twitter_callback')]
     public function index(UserRepository $userDb, EntityManagerInterface $manager, Request $request): Response
     {
-//        //get access token
+        //get access token
         try {
             $token = $this->provider->getAccessToken('authorization_code', [
                 'code' => $_GET['code'],
