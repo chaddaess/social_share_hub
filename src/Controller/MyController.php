@@ -6,15 +6,17 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use Nelmio\ApiDocBundle\Annotation\Operation;
+use OpenApi\Annotations as OA;
 
 class MyController extends AbstractController
 {
-    #[Route('/my', name: 'app_my')]
-    public function index(Request $request): Response
+
+    public function index(Request $request)
     {
-        $sess = $request->getSession();
-        dd($sess->get('twitter_session'));
-        return $this->render('test/index.html.twig');
+
+        dd("hi");
     }
 }
 

@@ -12,6 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use OpenApi\Annotations as OA;
 
 class FacebookCallbackController extends AbstractController
 {
@@ -27,7 +28,32 @@ class FacebookCallbackController extends AbstractController
         ]);
     }
 
-    #[Route('/fcb-callback', name: 'fcb_callback')]
+    #[Route('/fcb-callback', name: 'fcb_callback',methods:"GET" )]
+    /**
+     * @OA\Get(
+     *     path="/fcb-callback",
+     *     tags={"SocialMedia authentification"},
+     *     summary="authenticates user to their Facebook account",
+     *     @OA\Response(
+     *         response=200,
+     *         description="OK,user authenticated to Facebook successfully,redirects to /socialmedia with the user's profile picture",
+     *         headers={}
+     *     )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Bad request,redirects to/socialmedia with an error message"
+     *     ),
+     *     @OA\Response(
+     *         response=190,
+     *         description="OAuth exception:invalid or expired token,redirects to/socialmedia with an error messag"
+     *     ),
+     *      @OA\Response(
+     *          response=500,
+     *          description="Internal server error"
+     *      ),
+     * )
+     */
     public function index(UserRepository $userDb, EntityManagerInterface $manager, Request $request): Response
     {
         //get token
