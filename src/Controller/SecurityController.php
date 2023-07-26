@@ -18,6 +18,7 @@ class SecurityController extends AbstractController
      */
     public function login(AuthenticationUtils $authenticationUtils, Request $request): Response
     {
+
         $session = $request->getSession();
         if ($session->get('user_email')) {
             // someone is already logged-in
@@ -42,9 +43,12 @@ class SecurityController extends AbstractController
     /**
      * Logs user out of their account
      */
-    public function logout(): void
+    public function logout(Request $request): void
     {
-
+        $session=$request->getSession();
+        if($session->get('user_email')){
+            $session->remove('user_email');
+        }
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
 }

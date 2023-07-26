@@ -10,7 +10,6 @@
         <div class="alert alert-danger" role="alert">{{ flash_error }}</div>
 
     {% endfor %}
-    {{ form_errors(registrationForm) }}
 
     {{ form_start(registrationForm) }}
     {{ form_row(registrationForm.email) }}
@@ -24,5 +23,4 @@
     {{ form_rest(registrationForm) }}
 {% endblock %}
 {% block extra %}
-    {{ password }}
 {% endblock %}
