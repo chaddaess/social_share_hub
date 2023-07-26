@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit colors="true" bootstrap="vendor/autoload.php">
+    <testsuites>
+        <testsuite name="Unit Tests">
+            <directory>tests/Unit</directory>
+        </testsuite>
+    </testsuites>
+    <php>
+        <env name="KERNEL_CLASS" value="App\Kernel"/>
+        <env name="DATABASE_URL" value="mysql://root:@127.0.0.1:3306/dlivr_it?serverVersion=10.4.27-MariaDB"/>
+        <env name="MAILER_DSN" value="null://null"/>
+        <env name="FCB_ID" value="4f5d921cd274f31f20d97190e3842989"/>
+        <env name="FCB_SECRET" value="1051784289526895"/>
+        <env name="FCB_CALLBACK" value="http://localhost:8000/fcb-callback"/>
+        <env name="TW_ID" value="MVU4cDRac3JlbGVhSjNVcVlpVWQ6MTpjaQ"/>
+        <env name="TW_SECRET" value="6T2nsWfvoAYR2iUz7h3-fSh7bKy4tQ2sNXykJj08MusjCAuGev"/>
+        <env name="TW_CALLBACK" value="http://localhost:8000/twitter-callback"/>
+        <env name="LINK_ID" value="78bm35lcm0nfmt"/>
+        <env name="LINK_SECRET" value="isaEdLcalpXGsLhB"/>
+        <env name="LINK_CALLBACK" value="http://localhost:8000/linkedin-callback"/>
+
+
+    </php>
+</phpunit>
