@@ -31,8 +31,13 @@ class LinkedinCallbackController extends AbstractController
     /**
      * @OA\Get(
      *     path="/linkedin-callback",
-     *     tags={"SocialMedia authentification"},
-     *     summary="Generates access token and authenticates user to their Twitter account",
+     *     tags={"SocialMedia authentication"},
+     *     summary="Generates an access token and authenticates user to their Twitter account",
+     *     @OA\Parameter(
+     *        name="code",
+     *        in="query",
+     *        description="Authorization code obtained from linkedin/login"
+     *      ),
      *     @OA\Response(
      *         response=200,
      *         description="OK,user authenticated to Linkedin successfully,redirects to /socialmedia with the user's profile picture",

@@ -31,10 +31,13 @@ class TwitterCallbackController extends AbstractController
      * @OA\Get(
      *     path="/twitter-callback",
      *     tags={"SocialMedia authentication"},
-     *     summary="Generates access token and authenticates user to their Twitter account",
-     *
-     *
+     *     summary="Generates an access token and authenticates user to their Twitter account",
      * ),
+     *      @OA\Parameter(
+     *        name="code",
+     *        in="query",
+     *        description="Authorization code obtained from twitter/login"
+     *      ),
      *     @OA\Response(
      *         response=200,
      *         description="OK,user authenticated to Twitter successfully,redirects to /socialmedia with the user's profile picture",

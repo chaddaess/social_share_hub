@@ -32,8 +32,13 @@ class FacebookCallbackController extends AbstractController
     /**
      * @OA\Get(
      *     path="/fcb-callback",
-     *     tags={"SocialMedia authentification"},
-     *     summary="authenticates user to their Facebook account",
+     *     tags={"SocialMedia authentication"},
+     *     summary="Generates an access token and authenticates user to their Facebook account",
+     *     @OA\Parameter(
+     *      name="code",
+     *       in="query",
+     *      description="Authorization code obtained from facebook/login"
+     *     ),
      *     @OA\Response(
      *         response=200,
      *         description="OK,user authenticated to Facebook successfully,redirects to /socialmedia with the user's profile picture",
@@ -46,7 +51,7 @@ class FacebookCallbackController extends AbstractController
      *     ),
      *     @OA\Response(
      *         response=190,
-     *         description="OAuth exception:invalid or expired token,redirects to/socialmedia with an error messag"
+     *         description="OAuth exception:invalid or expired token,redirects to/socialmedia with an error message"
      *     ),
      *      @OA\Response(
      *          response=500,
