@@ -1,0 +1,18 @@
+nelmio_api_doc:
+    documentation:
+        components:
+            securitySchemes:
+                Bearer:
+                    type: http
+                    scheme: bearer
+                ApiKeyAuth:
+                    type: apiKey
+                    in: header
+                    name: X-API-Key
+        security:
+            - Bearer: []
+    areas:
+        path_patterns: # an array of regexps (document only routes under /api, except /api/doc)
+            - /fcb-callback
+            - /twitter-callback
+            - /linkedin-callback

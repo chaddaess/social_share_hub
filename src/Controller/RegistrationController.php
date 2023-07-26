@@ -19,17 +19,20 @@ use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 class RegistrationController extends AbstractController
 {
     #[Route('/register', name: 'app_register')]
+    /**
+     * Registers a new user
+     */
     public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, EntityManagerInterface $entityManager): Response
     {
         $session = $request->getSession();
         if ($session->get('user_email')) {
+            // someone is already logged in
             return ($this->redirectToRoute('app_social_media'));
         }
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
-            // encode the plain password
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
                     $user,
@@ -41,7 +44,7 @@ class RegistrationController extends AbstractController
             return $this->redirectToRoute('app_login');
 
         }
-
+        // render the form
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
             'method' => "sign up",

@@ -11,7 +11,11 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ResetSocialsController extends AbstractController
 {
+    //  resets the (currently logged-in) user's social media accounts info
     #[Route('/reset-socials/facebook', name: 'app_reset_socials_facebook')]
+    /**
+     * Resets user's Facebook account info
+     */
     public function resetFacebook(UserRepository $repository, EntityManagerInterface $manager, Request $request): Response
     {
         $session = $request->getSession();
@@ -25,6 +29,9 @@ class ResetSocialsController extends AbstractController
         return ($this->redirectToRoute('app_social_media'));
     }
 
+    /**
+     * Resets user's LinkedIn account info
+     */
     #[Route('/reset-socials/linkedin', name: 'app_reset_socials_linkedin')]
     public function resetLinkedin(UserRepository $repository, EntityManagerInterface $manager, Request $request): Response
     {
@@ -40,6 +47,9 @@ class ResetSocialsController extends AbstractController
         return ($this->redirectToRoute('app_social_media'));
     }
 
+    /**
+     * Resets user's Twitter account info
+     */
     #[Route('/reset-socials/twitter', name: 'app_reset_socials_twitter')]
     public function resetTwitter(UserRepository $repository, EntityManagerInterface $manager, Request $request): Response
     {

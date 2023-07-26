@@ -10,17 +10,21 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
+    // uses Symfony's Security bundle
+    // lookup Symfony's official documentation https://symfony.com/doc/current/security.html for more information
     #[Route(path: '/login', name: 'app_login')]
+    /**
+     * Logs user in to their account
+     */
     public function login(AuthenticationUtils $authenticationUtils, Request $request): Response
     {
+
         $session = $request->getSession();
         if ($session->get('user_email')) {
+            // someone is already logged-in
             return ($this->redirectToRoute('app_social_media'));
         }
-
-        // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
-        // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
         $postErrorMessage = $request->get('error_message');
         $this->addFlash('unauthorized_access', $postErrorMessage);
@@ -35,10 +39,16 @@ class SecurityController extends AbstractController
 
             ]);
     }
-
     #[Route(path: '/logout', name: 'app_logout')]
-    public function logout(): void
+    /**
+     * Logs user out of their account
+     */
+    public function logout(Request $request): void
     {
+        $session=$request->getSession();
+        if($session->get('user_email')){
+            $session->remove('user_email');
+        }
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
     }
 }

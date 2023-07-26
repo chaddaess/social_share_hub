@@ -73,6 +73,12 @@ hr {
     padding: 1rem;
 }
 
+/*
+===========================================
+  Post archive(user's old post collection)
+              page styles
+===========================================
+*/
 .link {
     width: 90%;
     border: 1px solid black;

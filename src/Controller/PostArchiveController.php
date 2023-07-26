@@ -16,10 +16,15 @@ use Symfony\Component\Routing\Annotation\Route;
 class PostArchiveController extends AbstractController
 {
     #[Route('/archive', name: 'app_post_archive')]
+    /**
+     * Collects posts made by the currently logged-in user  from the database
+     */
     public function index(ManagerRegistry $doctrine, PostRepository $postRepository, Request $request, UserRepository $userRepository): Response
     {
         $session = $request->getSession();
         if (!$session->has('user_email')) {
+            // no user is currently logged in
+            //redirect to login page
             return ($this->redirectToRoute('app_login'));
         }
         $current_user = $userRepository->findOneBy(['email' => $session->get('user_email')]);

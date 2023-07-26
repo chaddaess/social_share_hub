@@ -1,40 +1,44 @@
+// displays a  dialog popup upon clicking on the social media account's picture
+// to confirm resetting the said  account's settings
+// the popup is hidden upon clicking on the cancellation button ("no")
+
 let linkPicture = document.querySelector('#linkedin-pfp');
-let link = document.querySelector('#link');
+let linkDialog = document.querySelector('#link'); // LinkedIn reset  confirmation dialog
 let fbPicture = document.querySelector('#facebook-pfp');
-let fb = document.querySelector('#fb');
-let fbButton = document.querySelector('#fb-button');
-let twitterButton = document.querySelector('#tw-button');
+let fbDialog = document.querySelector('#fb');// Facebook reset  confirmation dialog
+let fbCancelButton = document.querySelector('#fb-button');
+let twitterCancelButton = document.querySelector('#tw-button');
 let twitterPicture = document.querySelector('#twitter-pfp');
-let tw = document.querySelector('#tw');
-let linkedinButton = document.querySelector('#link-button');
+let twDialog = document.querySelector('#tw'); // Twitter reset confirmation dialog
+let linkedinCancelButton = document.querySelector('#link-button');
 if (fbPicture) {
     fbPicture.addEventListener('click', () => {
-        fb.style.display = "block"
-        if (tw !== null) tw.style.display = "none"
-        if (link !== null) link.style.display = "none"
+        fbDialog.style.display = "block"
+        if (twDialog !== null) twDialog.style.display = "none"
+        if (linkDialog !== null) linkDialog.style.display = "none"
 
     })
-    fbButton.addEventListener('click', () => {
-        fb.style.display = "none";
+    fbCancelButton.addEventListener('click', () => {
+        fbDialog.style.display = "none";
     })
 }
 
 if (linkPicture) {
     linkPicture.addEventListener('click', () => {
-        link.style.display = "block"
-        if (tw !== null) tw.style.display = "none";
-        if (fb !== null) fb.style.display = "none";
+        linkDialog.style.display = "block"
+        if (twDialog !== null) twDialog.style.display = "none";
+        if (fbDialog !== null) fbDialog.style.display = "none";
     })
-    linkedinButton.addEventListener('click', () => {
-        link.style.display = "none";
+    linkedinCancelButton.addEventListener('click', () => {
+        linkDialog.style.display = "none";
     })
 }
 if (twitterPicture)
     twitterPicture.addEventListener('click', () => {
-        tw.style.display = "block"
-        if (fb !== null) fb.style.display = "none"
-        if (link !== null) link.style.display = "none"
+        twDialog.style.display = "block"
+        if (fbDialog !== null) fbDialog.style.display = "none"
+        if (linkDialog !== null) linkDialog.style.display = "none"
     })
-twitterButton.addEventListener('click', () => {
-    tw.style.display = "none";
+twitterCancelButton.addEventListener('click', () => {
+    twDialog.style.display = "none";
 })
