@@ -153,7 +153,7 @@ a {
 
 .google-link {
     text-decoration: none;
-    margin-left: 0.5rem;
+    width: 25rem;
 }
 
 .btn.btn-lg.btn-primary.google {
@@ -161,6 +161,7 @@ a {
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    cursor:auto;
 
 }
 
