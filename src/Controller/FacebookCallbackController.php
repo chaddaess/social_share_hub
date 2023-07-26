@@ -3,7 +3,6 @@
 namespace App\Controller;
 
 use App\Repository\UserRepository;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use ErrorException;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
@@ -13,13 +12,13 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use OpenApi\Annotations as OA;
-
 class FacebookCallbackController extends AbstractController
 {
     private Facebook $provider;
 
     public function __construct()
     {
+        //will be used to generate the access token later
         $this->provider = new Facebook([
             'clientId' => $_ENV['FCB_ID'],
             'clientSecret' => $_ENV['FCB_SECRET'],
@@ -30,6 +29,7 @@ class FacebookCallbackController extends AbstractController
 
     #[Route('/fcb-callback', name: 'fcb_callback',methods:"GET" )]
     /**
+     * Generates an access token and authenticates user to their Facebook account
      * @OA\Get(
      *     path="/fcb-callback",
      *     tags={"SocialMedia authentication"},
@@ -61,14 +61,17 @@ class FacebookCallbackController extends AbstractController
      */
     public function index(UserRepository $userDb, EntityManagerInterface $manager, Request $request): Response
     {
-        //get token
         try {
+            //building the access token
             $token = $this->provider->getAccessToken('authorization_code', [
+                //authorization code obtained upon redirecting from facebook/login
                 'code' => $_GET['code']
             ]);
         } catch (ErrorException|\BadMethodCallException $e) {
+            //ill formed request
             return ($this->redirectToRoute('app_social_media'));
         } catch (IdentityProviderException $e) {
+            //correct request,expired or wrong authorization code
             return ($this->redirectToRoute('app_social_media', [
                 'facebook_connect_error' => "⨂ Could not connect to facebook,please try again later"
             ]));
@@ -78,9 +81,8 @@ class FacebookCallbackController extends AbstractController
             //get user's complete info
             $user = $this->provider->getResourceOwner($token);
             $id = $user->getId();
-            //get user's picture
             $userPicture = "http://graph.facebook.com/$id/picture?type=large&access_token=$token";
-            //add Facebook account to current user
+            //add Facebook account info to the database
             $session = $request->getSession();
             $user_connected = $userDb->findOneBy(['email' => $session->get('user_email')]);
             $user_connected->setFacebookId($user->getId());
@@ -88,7 +90,8 @@ class FacebookCallbackController extends AbstractController
             $user_connected->setFacebookExpirationTime($token->getExpires());
             $manager->persist($user_connected);
             $manager->flush();
-            //set the session
+            //add basic Facebook account info to the session
+            //to avoid too many database requests in the future
             $facebookSession = [
                 'user' => $user,
                 'picture' => $userPicture,
@@ -100,7 +103,7 @@ class FacebookCallbackController extends AbstractController
             return ($this->redirectToRoute('app_social_media'));
         } catch (\Exception $e) {
             return ($this->redirectToRoute('app_social_media', [
-                'facebook_connect_error' => "⨂ Could not connect to facebook,please try again later"
+                'facebook_connect_error' => "❌ Could not connect to facebook,please try again later"
             ]));
         }
 

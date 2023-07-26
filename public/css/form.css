@@ -1,3 +1,8 @@
+/*
+===========================================
+      Login/Registration form styles
+===========================================
+*/
 *:before,
 *:after {
     padding: 0;
@@ -191,11 +196,6 @@ li {
     color: darkred;
 
 }
-
-::marker {
-
-}
-
 button > a {
     display: block;
     width: 100%;
@@ -211,5 +211,4 @@ button > a {
     color: white;
     font-family: 'Poppins', sans-serif;
     font-size: 0.9em;
-
 }

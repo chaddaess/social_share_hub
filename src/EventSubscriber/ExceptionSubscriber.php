@@ -27,15 +27,15 @@ class ExceptionSubscriber implements EventSubscriberInterface
 
     public function onKernelException(ExceptionEvent $event)
     {
-        // Check if the exception is a NotFoundHttpException
+        // check if the exception is a NotFoundHttpException
         if ($event->getThrowable() instanceof NotFoundHttpException) {
             // Generate the URL for the fallback page
             $fallbackUrl = $this->urlGenerator->generate('app_fallback_page');
 
-            // Create a RedirectResponse to the fallback page
+            // create a RedirectResponse to the fallback page
             $response = new RedirectResponse($fallbackUrl);
 
-            // Set the response on the event
+            // set the response on the event
             $event->setResponse($response);
         }
     }

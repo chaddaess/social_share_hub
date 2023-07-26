@@ -17,21 +17,25 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use ValueError;
-use OpenApi\Annotations as OA;
 
 
 
 class PostContentController extends AbstractController
 {
     #[Route('/post', name: 'app_post_content')]
+    /**
+     * Write a post and publish it on social media
+     */
     public function index(Request $request, ManagerRegistryAlias $doctrine, UserRepository $repository, SluggerInterface $slugger)
     {
+        // variable $test is used to track if posting was successful(=true)
         $test = true;
         $session = $request->getSession();
+        // social media accounts the user is connected to
         $choices = array();
         if (!$session->has('user_email')) {
             return ($this->redirectToRoute('app_login', [
-                'error_message' => "⨂ Please sign in to post on your social media"
+                'error_message' => "❌ Please sign in to post on your social media"
             ]));
         }
         if ($session->get('facebook_session')['picture'] != '') {
@@ -45,23 +49,27 @@ class PostContentController extends AbstractController
         }
 
         if (!$choices) {
+            // user is connected to no social media account
             return ($this->redirectToRoute('app_social_media', [
-                'error_message' => "⨂ Please start by setting up a social media account"
+                'error_message' => "❌ Please start by setting up a social media account"
             ]));
         }
+        //the post to be published on selected social media accounts
         $post = new Post();
         $form = $this->createForm(PostType::class, $post, [
+            // irrigate the form's checkbox with the available social media accounts
+            // the user will choose from these accounts which ones  to post on
             'postedOn' => $choices,
         ]);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
             //get form input data
-            $socialsArray = ($form->getData()->getPostedOn());
+            $socialsArray = ($form->getData()->getPostedOn()); // accounts selected to post on
             $text = $form->getData()->getTextContent();
-            //set up post
+            //set up  the post's content
             $currentTimeStamp = new \DateTime();
             $post->setPostTime($currentTimeStamp);
-            $user = $repository->findOneBy(['email' => $session->get('user_email')]);
+            $user = $repository->findOneBy(['email' => $session->get('user_email')]);//user currently logged in
             $post->setUser($user);
             $link = $this->extractLink($text);
             $post->setLink($link);
@@ -71,20 +79,18 @@ class PostContentController extends AbstractController
             $post->setDomain($post_info['domain']);
             $post->setTitle($post_info['title']);
             $manager = $doctrine->getManager();
-
             if ($link == '') {
-                $this->addFlash('missing_link', '⨂ A link to your article is required');
+                $this->addFlash('missing_link', '❌ A link to your article is required');
                 return ($this->redirectToRoute("app_post_content"));
             }
             if (count($socialsArray) == 0) {
-                $this->addFlash('curl_error', "⨂ please choose an account");
+                $this->addFlash('curl_error', "❌ please choose an account");
                 return ($this->redirectToRoute("app_post_content"));
             }
-            //make api calls to every social media in $socialsArray to post $text
-            //creating a multi call handler
+            //  to permit posting on Twitter and LinkedIn  simultaneously
             $mh = curl_multi_init();
             $handles = array();
-            //1 Post to Twitter
+            // post to Twitter
             if (in_array('twitter', $socialsArray)) {
                 $url = 'https://api.twitter.com/2/tweets';
                 $access_token_tw = ($repository->findOneBy(['email' => $session->get('user_email')])->getTwitterToken());
@@ -101,7 +107,7 @@ class PostContentController extends AbstractController
             }
 
 
-            //2 Post to Linkedin
+            // post to LinkedIn
             if (in_array('linkedin', $socialsArray)) {
                 $access_token_link = ($repository->findOneBy(['email' => $session->get('user_email')])->getLinkedinToken());
                 $userID = $repository->findOneBy(['email' => $session->get('user_email')])->getLinkedinId();
@@ -136,7 +142,7 @@ class PostContentController extends AbstractController
                 $handles['linkedinHandler'] = $chLinkedin;
             }
 
-            //Execute the requests in parallel
+            // execute the requests in parallel
             do {
                 $mrc = curl_multi_exec($mh, $active);
             } while ($mrc == CURLM_CALL_MULTI_PERFORM);
@@ -149,6 +155,7 @@ class PostContentController extends AbstractController
                 }
             }
 
+            // handle responses
             foreach ($handles as $key => $handle) {
                 $response = curl_multi_getcontent($handle);
                 $responseData = json_decode($response, true);
@@ -159,6 +166,7 @@ class PostContentController extends AbstractController
                 } else {
                     if (array_key_exists('status', $responseData)) {
                         if (isset($responseData['status']) && $responseData['status'] < 200 || $responseData['status'] >= 300) {
+                            // Twitter's and LinkedIn's responses have different appellations for the error/success message
                             if (array_key_exists('detail', $responseData)) {
                                 $error = $responseData['detail'];
                             } else {
@@ -172,30 +180,33 @@ class PostContentController extends AbstractController
 
             }
             if (!$test) {
-                $this->addFlash('curl_error', "⨂ Error:$error please try again");
+                // posting was unsuccessful
+                $this->addFlash('curl_error', "❌ Error:$error please try again");
                 return ($this->redirectToRoute("app_post_content"));
             }
-            // Close the handles
+            // close the handles
             foreach ($handles as $key => $value) {
                 curl_multi_remove_handle($mh, $value);
             }
             curl_multi_close($mh);
-            //3 Post to Facebook
-            //Facebook should be  called last since we're using a redirection link rather than an api call
+            // post to Facebook
+            // NOTE: should be  called last since we're using a dialog popup rather than making  an api call
             if (in_array('facebook', $socialsArray)) {
                 $appId = $_ENV['FCB_ID'];
+                //save post to the database
                 $manager->persist($post);
                 $manager->flush();
                 return ($this->redirect("https://www.facebook.com/dialog/feed?app_id=$appId&display=page&link=$link&redirect_uri=http://localhost:8000/socialmedia?success-posting=✓article%20posted%20successfully"));
             }
-
+            // save post to the database
             $manager->persist($post);
             $manager->flush();
             return ($this->redirectToRoute("app_social_media", [
                 'success-posting' => '✅article posted successfully'
             ]));
         } else {
-            $options = [];
+            // render the form
+            $options = []; // options for the form's checkbox
             $i = 0;
             foreach ($choices as $key => $value) {
                 if ($key) {
@@ -210,7 +221,6 @@ class PostContentController extends AbstractController
 
             ]);
         }
-
 
     }
 

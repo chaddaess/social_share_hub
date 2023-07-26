@@ -19,13 +19,13 @@ class TwitterCallbackController extends AbstractController
 
     public function __construct()
     {
+        //will be used to generate the access token later
         $this->provider = new Twitter([
             'clientId' => $_ENV['TW_ID'],
             'clientSecret' => $_ENV['TW_SECRET'],
             'redirectUri' => $_ENV['TW_CALLBACK'],
         ]);
     }
-
     #[Route('/twitter-callback', name: 'twitter_callback',methods:"GET")]
     /**
      * @OA\Get(
@@ -67,27 +67,29 @@ class TwitterCallbackController extends AbstractController
 
     public function index(UserRepository $userDb, EntityManagerInterface $manager, Request $request): Response
     {
-        //get access token
         try {
+            //building the access token
             $token = $this->provider->getAccessToken('authorization_code', [
+                //authorization code obtained upon redirecting from twitter/login
                 'code' => $_GET['code'],
                 'code_verifier' => $request->getSession()->get('verifier'),
             ]);
         } catch (IdentityProviderException $e) {
+            //correct request,expired/wrong authorization code or verifier
             return ($this->redirectToRoute('app_social_media', [
                 'twitter_connect_error' => "⨂ Could not connect to twitter,please try again later"
             ]));
         } catch (ErrorException|\BadMethodCallException $e) {
+            //ill formed request
             return ($this->redirectToRoute('app_social_media'));
         }
-        //use the token
         try {
             $session = $request->getSession();
             //get user's complete info
             $user = $this->provider->getResourceOwner($token);
             $userArray = $user->toArray();
             $userPicture = $userArray['profile_image_url'];
-            //add Twitter account to current user
+            //add Twitter account info to the database
             $user_connected = $userDb->findOneBy(['email' => $session->get('user_email')]);
             $user_connected->setTwitterId($user->getId());
             $user_connected->setTwitterPicture($userPicture);
@@ -95,7 +97,8 @@ class TwitterCallbackController extends AbstractController
             $user_connected->setTwitterToken($token->getToken());
             $manager->persist($user_connected);
             $manager->flush();
-            //set the session
+            //add basic Twitter account info to the session
+            //to avoid too many database requests in the future
             $twitterSession = [
                 'user' => $user,
                 'picture' => $userPicture,
@@ -105,10 +108,8 @@ class TwitterCallbackController extends AbstractController
             return ($this->redirectToRoute('app_social_media'));
         } catch (\Exception $e) {
             return ($this->redirectToRoute('app_social_media', [
-                'twitter_connect_error' => "⨂ Could not connect to twitter,please try again later"
+                'twitter_connect_error' => "❌ Could not connect to twitter,please try again later"
             ]));
         }
-
-
     }
 }
